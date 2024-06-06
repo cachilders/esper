@@ -1,39 +1,11 @@
+local Mouse = include('lib/mouse')
 local State = include('lib/state')
 
-local _hid, state
+local mouse, state
 
-local function _hid_action(type, code, value)
-  -- POC TODO Move to class when purpose is clarified`
-  if type == 2 then -- mouse
-    if code == 0  then -- x
-      print('x delta '..value)
-    elseif code == 1 then -- y
-      print('y delta '..value)
-    end
-  elseif type == 1 then
-    if code == 272 then -- Left click
-      if value == 1 then -- click
-        print('left click')
-      elseif value == 2 then -- hold
-        print('left hold')
-      elseif value == 0 then -- release
-        print('left release')
-      end
-    elseif code == 273 then -- Right click
-      if value == 1 then -- click
-        print('right click')
-      elseif value == 2 then -- hold
-        print('right hold')
-      elseif value == 0 then -- release
-        print('right release')
-      end
-    end
-  end
-end
-
-local function _init_hid()
-  _hid = hid.connect()
-  _hid.event = _hid_action
+local function _init_mouse()
+  mouse = Mouse:new()
+  mouse:init()
 end
 
 local function _init_state()
@@ -42,8 +14,8 @@ local function _init_state()
 end
 
 function init()
+  _init_mouse()
   _init_state()
-  _init_hid()
 end
 
 function redraw()
