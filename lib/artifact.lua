@@ -3,7 +3,7 @@ local COLUMNS, ROWS = 8, 8
 
 local Artifact = {
   depth = 8,
-  power = 2,
+  power = 1,
   region = nil,
   reference = nil,
   representation = nil,
@@ -23,7 +23,8 @@ function Artifact:init(reference)
   local simplification = {}
 
   local function get_pixel_at(x, y)
-    screen.display_image_region(reflection, x, y, 1, 1, 0, 0)
+    -- image is 0-indexed
+    screen.display_image_region(reflection, x - 1, y - 1, 1, 1, 0, 0)
     local buff = screen.peek(0, 0, 1, 1)
     return string.byte(buff, 1)
   end
@@ -49,7 +50,7 @@ function Artifact:init(reference)
       for k = 1, COLUMNS do
         local l2_col = {}
         for l = 1, ROWS do
-          table.insert(l2_col, get_pixel_at(i * COLUMNS + k, j * ROWS + l))
+          table.insert(l2_col, get_pixel_at((i - 1) * COLUMNS + k, (j - 1) * ROWS + l))
         end
         table.insert(l1_row, l2_col)
       end
@@ -67,6 +68,10 @@ end
 
 function Artifact:get(k)
   return self[k]
+end
+
+function Artifact:set(k, v)
+  self[k] = v
 end
 
 function Artifact:get_representation_at(x, y)

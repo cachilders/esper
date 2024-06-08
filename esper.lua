@@ -4,6 +4,7 @@ local Mouse = include('lib/mouse')
 local State = include('lib/state')
 
 local interface, met, mouse, state
+local util = require('util')
 
 local function _init_artifact()
   artifact = Artifact:new()
@@ -11,7 +12,6 @@ local function _init_artifact()
 end
 
 local function _init_clocks()
-  local met = metro.init(redraw, 15 / params:get('clock_tempo'))
 end
 
 local function _init_interface()
@@ -46,12 +46,27 @@ end
 
 function enc(e, d)
   local shift = state:get('shift')
+  local position = artifact:get('region')
+  local pos_x, pos_y = position[1], position[2]
+  if e == 2 then
+    pos_x = util.clamp(pos_x + d, 1, 8)
+  elseif e == 3 then
+    pos_y = util.clamp(pos_y + d, 1, 8)
+  end
+  artifact:set('region', {pos_x, pos_y})
 end
 
 function key(k, z)
   local shift = state:get('shift')
+  if z == 0 then
+    if k == 2 then
+      artifact:set('power', 1)
+    elseif k == 3 then
+      artifact:set('power', 2)
+    end
+  end
 end
 
 function refresh()
-  -- redraw()
+  redraw()
 end

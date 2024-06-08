@@ -76,8 +76,6 @@ function Interface:_draw_cells(artifact)
         screen.fill()
       end
     end
-
-    -- self.cells_dirty = false
   end
 end
 
