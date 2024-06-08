@@ -1,13 +1,13 @@
 local ASSET_PATH = '/home/we/dust/code/esper/assets/ui/'
-local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 7, 5, 10, 11, 7
+local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 7, 5, 13, 11, 7
 
 local Interface = {}
 
 function Interface._draw_grid(pulse)
-  -- screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
+  screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
   screen.level(pulse and 5 or 1)
 
-  -- SQUARE is 7,7
+  -- 'Pixel' square is 7,7
 
   -- 11, 7 level  1
   -- 121, 49 level 2
