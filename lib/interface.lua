@@ -1,24 +1,31 @@
 local ASSET_PATH = '/home/we/dust/code/esper/assets/ui/'
-local GRID_X, GRID_Y, GRID_C, GRID_R = 32, 8, 14, 11
+local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 7, 5, 10, 11, 7
 
 local Interface = {}
 
 function Interface._draw_grid(pulse)
-  screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
-  screen.level(pulse and 12 or 4)
+  -- screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
+  screen.level(pulse and 5 or 1)
+
+  -- SQUARE is 7,7
+
+  -- 11, 7 level  1
+  -- 121, 49 level 2
+  -- 1331, 343 level 3
 
   local x, y = GRID_X, GRID_Y
-  for i = 1, GRID_R do
+  local grid_h, grid_w = GRID_R * GRID_EDGE, GRID_C * GRID_EDGE
+  for i = 1, GRID_R + 1 do
     screen.move(x, y)
-    screen.line(x + 65, y)
-    y = y + 5
+    screen.line(grid_w + x, y)
+    y = y + GRID_EDGE
   end
 
   local x, y = GRID_X, GRID_Y
-  for i = 1, GRID_C do
+  for i = 1, GRID_C + 1 do
     screen.move(x, y)
-    screen.line(x, y + 50)
-    x = x + 5
+    screen.line(x, grid_h + y)
+    x = x + GRID_EDGE
   end
 end
 
