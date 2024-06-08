@@ -1,17 +1,13 @@
 local ASSET_PATH = '/home/we/dust/code/esper/assets/ui/'
-local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 7, 5, 10, 11, 7
+local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 6, 5, 13, 8, 8
 
-local Interface = {}
+local Interface = {
+  cells_dirty = true
+}
 
 function Interface._draw_grid(pulse)
-  -- screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
+  screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
   screen.level(pulse and 5 or 1)
-
-  -- SQUARE is 7,7
-
-  -- 11, 7 level  1
-  -- 121, 49 level 2
-  -- 1331, 343 level 3
 
   local x, y = GRID_X, GRID_Y
   local grid_h, grid_w = GRID_R * GRID_EDGE, GRID_C * GRID_EDGE
@@ -39,7 +35,8 @@ end
 function Interface:init()
 end
 
-function Interface:draw()
+function Interface:draw(artifact)
+  self:_draw_cells(artifact)
   self._draw_grid()
 end
 
@@ -59,6 +56,27 @@ function Interface:track(angle, direction)
 end
 
 function Interface:wait(s)
+end
+
+function Interface:_draw_cells(artifact)
+  if self.cells_dirty then
+    local pixels
+
+    if artifact:get('power') == 1 then
+      pixels = artifact:get('simplification')
+    else
+      local region = artifact:get('region')
+      pixels = artifact:get_representation_at(region[1], region[2])
+    end
+
+    for i = 1, GRID_R do
+      for j = 1, GRID_C do
+        screen.level(pixels[i][j])
+        screen.rect((GRID_EDGE * (i - 1)) + GRID_X, (GRID_EDGE * (j - 1)) + GRID_Y, 5, 5)
+        screen.fill()
+      end
+    end
+  end
 end
 
 return Interface
