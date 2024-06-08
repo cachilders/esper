@@ -3,7 +3,8 @@ local COLUMNS, ROWS = 8, 8
 
 local Artifact = {
   depth = 8,
-  power = 1,
+  power = 2,
+  region = nil,
   reference = nil,
   representation = nil,
   simplification = nil
@@ -58,6 +59,8 @@ function Artifact:init(reference)
     table.insert(representation, l1_col)
     table.insert(simplification, s_col)
   end
+  
+  self.region = {1, 1} -- selected zoom segment
   self.representation = representation
   self.simplification = simplification
 end
@@ -66,7 +69,7 @@ function Artifact:get(k)
   return self[k]
 end
 
-function Artifact:get_representation_at(x_y)
+function Artifact:get_representation_at(x, y)
   return self.representation[x][y]
 end
 

@@ -3,11 +3,15 @@ local Interface = include('lib/interface')
 local Mouse = include('lib/mouse')
 local State = include('lib/state')
 
-local interface, mouse, state
+local interface, met, mouse, state
 
 local function _init_artifact()
   artifact = Artifact:new()
   artifact:init('test.png')
+end
+
+local function _init_clocks()
+  local met = metro.init(redraw, 15 / params:get('clock_tempo'))
 end
 
 local function _init_interface()
@@ -30,11 +34,12 @@ function init()
   _init_interface()
   _init_mouse()
   _init_state()
+  _init_clocks()
 end
 
 function redraw()
   screen.clear()
-  interface:draw()
+  interface:draw(artifact)
   screen.stroke()
   screen.update()
 end
@@ -48,5 +53,5 @@ function key(k, z)
 end
 
 function refresh()
-  redraw()
+  -- redraw()
 end
