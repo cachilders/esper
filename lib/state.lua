@@ -1,6 +1,9 @@
 local State = {
+  active = {1, 1},
   position = 1,
   power = 1,
+  pulse = false,
+  pulse_frame = 1,
   region = {1, 1},
   shift = false
 }

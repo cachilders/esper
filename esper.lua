@@ -40,7 +40,6 @@ end
 function redraw()
   screen.clear()
   interface:draw(artifact, state)
-  screen.stroke()
   screen.update()
 end
 
