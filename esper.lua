@@ -3,7 +3,7 @@ local Interface = include('lib/interface')
 local Mouse = include('lib/mouse')
 local State = include('lib/state')
 
-local interface, met, mouse, state
+local artifact, beat_clock_fwd, beat_clock_rev, interface, met, mouse, state
 local util = require('util')
 
 local function _init_artifact()
@@ -12,6 +12,9 @@ local function _init_artifact()
 end
 
 local function _init_clocks()
+  local beat_duration = 60 / params:get('clock_tempo')
+  beat_clock_fwd = metro.init(function() state:advance_pointer('active') end, beat_duration)
+  beat_clock_fwd:start()
 end
 
 local function _init_interface()

@@ -27,7 +27,7 @@ function Interface._draw_grid(state)
   end
 
   local hl = state:get('active')
-  x, y = hl[1] + GRID_X - 1, hl[2] + GRID_Y - 1
+  x, y = ((hl[1] - 1) * GRID_EDGE) + GRID_X, ((hl[2] - 1) * GRID_EDGE) + GRID_Y
   screen.level(15)
   screen.rect(x, y, GRID_EDGE, GRID_EDGE)
   screen.stroke()
