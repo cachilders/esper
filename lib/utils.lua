@@ -60,4 +60,14 @@ function utils.matrix(m, method)
   end
 end
 
+function utils.quantize_pixels(value, depth)
+  -- TODO: Improve this to make even use of the entire 0 - 15 range
+  --        naive solution here is not great
+  local MAX_DEPTH = 16
+  local colors = 2^depth
+  local multiplier = colors /  MAX_DEPTH
+  local scaler = MAX_DEPTH / colors
+  return math.floor(value * multiplier) * scaler
+end
+
 return utils

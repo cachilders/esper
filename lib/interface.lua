@@ -71,7 +71,7 @@ function Interface:_draw_cells(artifact, state)
     local pixels
 
     if state:get('power') == 1 then
-      pixels = artifact:get('simplification')
+      pixels = artifact:get_simplification()
     else
       local region = state:get('region')
       pixels = artifact:get_representation_at(region[1], region[2])

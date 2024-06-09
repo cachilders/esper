@@ -53,8 +53,23 @@ function Artifact:set(k, v)
   self[k] = v
 end
 
+function Artifact:get_simplification()
+  return self:_quantize_pixels(self.simplification)
+end
+
 function Artifact:get_representation_at(x, y)
-  return self.representation[x][y]
+  return self:_quantize_pixels(self.representation[x][y])
+end
+
+function Artifact:_quantize_pixels(m)
+  local quantized_pixels = {}
+  for i = 1, #m do
+    quantized_pixels[i] = {}
+    for j = 1, #m[i] do
+      quantized_pixels[i][j] = utils.quantize_pixels(m[i][j], self.depth)
+    end
+  end
+  return quantized_pixels
 end
 
 return Artifact
