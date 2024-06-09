@@ -5,9 +5,9 @@ local Interface = {
   cells_dirty = true
 }
 
-function Interface._draw_grid(pulse)
+function Interface._draw_grid(state)
   screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
-  screen.level(pulse and 5 or 1)
+  screen.level(state:get('pulse') and 5 or 1)
 
   local x, y = GRID_X, GRID_Y
   local grid_h, grid_w = GRID_R * GRID_EDGE, GRID_C * GRID_EDGE
@@ -15,14 +15,22 @@ function Interface._draw_grid(pulse)
     screen.move(x, y)
     screen.line(grid_w + x, y)
     y = y + GRID_EDGE
+    screen.stroke()
   end
 
-  local x, y = GRID_X, GRID_Y
+  x, y = GRID_X, GRID_Y
   for i = 1, GRID_C + 1 do
     screen.move(x, y)
     screen.line(x, grid_h + y)
     x = x + GRID_EDGE
+    screen.stroke()
   end
+
+  local hl = state:get('active')
+  x, y = ((hl[1] - 1) * GRID_EDGE) + GRID_X, ((hl[2] - 1) * GRID_EDGE) + GRID_Y
+  screen.level(15)
+  screen.rect(x, y, GRID_EDGE, GRID_EDGE)
+  screen.stroke()
 end
 
 function Interface:new(options)
@@ -35,9 +43,9 @@ end
 function Interface:init()
 end
 
-function Interface:draw(artifact)
-  self:_draw_cells(artifact)
-  self._draw_grid()
+function Interface:draw(artifact, state)
+  self:_draw_cells(artifact, state)
+  self._draw_grid(state)
 end
 
 function Interface:enhance(x, y)
@@ -58,14 +66,14 @@ end
 function Interface:wait(s)
 end
 
-function Interface:_draw_cells(artifact)
+function Interface:_draw_cells(artifact, state)
   if self.cells_dirty then
     local pixels
 
-    if artifact:get('power') == 1 then
+    if state:get('power') == 1 then
       pixels = artifact:get('simplification')
     else
-      local region = artifact:get('region')
+      local region = state:get('region')
       pixels = artifact:get_representation_at(region[1], region[2])
     end
 

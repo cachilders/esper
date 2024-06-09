@@ -1,11 +1,11 @@
 - Display
-  - Graph (60/80?)
+  - ~~Graph (60/80?)~~
   - Navigate graph with mouse
-  - Thinking it might be fractal zooming
+  - ~~Thinking it might be fractal zooming~~ (nope)
 - Click to enhance (zoom/resolve)
   - 4 beats to transition
 - Each level is a sequence
-  - Fractal-ly related to the upper sequence
+  - ~~Fractal-ly related to the upper sequence~~ (nope)
   - dive down
   - return up
   - track centers the note and the sequence moves
