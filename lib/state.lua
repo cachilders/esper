@@ -1,4 +1,7 @@
 local State = {
+  position = 1,
+  power = 1,
+  region = {1, 1},
   shift = false
 }
 

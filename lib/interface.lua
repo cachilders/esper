@@ -35,8 +35,8 @@ end
 function Interface:init()
 end
 
-function Interface:draw(artifact)
-  self:_draw_cells(artifact)
+function Interface:draw(artifact, state)
+  self:_draw_cells(artifact, state)
   self._draw_grid()
 end
 
@@ -58,14 +58,14 @@ end
 function Interface:wait(s)
 end
 
-function Interface:_draw_cells(artifact)
+function Interface:_draw_cells(artifact, state)
   if self.cells_dirty then
     local pixels
 
-    if artifact:get('power') == 1 then
+    if state:get('power') == 1 then
       pixels = artifact:get('simplification')
     else
-      local region = artifact:get('region')
+      local region = state:get('region')
       pixels = artifact:get_representation_at(region[1], region[2])
     end
 

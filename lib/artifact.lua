@@ -5,8 +5,6 @@ local utils = include('lib/utils')
 
 local Artifact = {
   depth = 4,
-  power = 1,
-  region = nil,
   reference = nil,
   representation = nil,
   simplification = nil
@@ -43,7 +41,6 @@ function Artifact:init(reference)
     table.insert(simplification, s_col)
   end
   
-  self.region = {1, 1} -- selected zoom segment
   self.representation = representation
   self.simplification = simplification
 end
