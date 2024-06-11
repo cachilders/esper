@@ -21,25 +21,39 @@ function Artifact:init(reference)
   local reflection = screen.load_png(ASSET_PATH..reference)
   local representation = {}
   local simplification = {}
-
-  for i = 1, COLUMNS do
-    local l1_col = {}
-    local s_col = {}
-    for j = 1, ROWS do
-      local l1_row = {}
-      for k = 1, COLUMNS do
-        local l2_col = {}
-        for l = 1, ROWS do
-          table.insert(l2_col, utils.get_pixel_at(reflection, (i - 1) * COLUMNS + k, (j - 1) * ROWS + l))
-        end
-        table.insert(l1_row, l2_col)
-      end
-      table.insert(l1_col, l1_row)
-      table.insert(s_col, utils.matrix(l1_row, 'median'))
+  local function run_thread(routine)
+    local continue, arg = coroutine.resume(routine)
+    if continue then
+      -- TODO this is a WIP optimization investigation for the
+      -- queue full error. It solves nothing, but I'd been meaning
+      -- to mess with coroutines.
+      run_thread(routine)
     end
-    table.insert(representation, l1_col)
-    table.insert(simplification, s_col)
   end
+
+  run_thread(coroutine.create(
+    function()
+      for i = 1, COLUMNS do
+        local l1_col = {}
+        local s_col = {}
+        for j = 1, ROWS do
+          local l1_row = {}
+          for k = 1, COLUMNS do
+            local l2_col = {}
+            for l = 1, ROWS do
+              table.insert(l2_col, utils.get_pixel_at(reflection, (i - 1) * COLUMNS + k, (j - 1) * ROWS + l))
+            end
+            table.insert(l1_row, l2_col)
+          end
+          table.insert(l1_col, l1_row)
+          table.insert(s_col, utils.matrix(l1_row, 'median'))
+        end
+        table.insert(representation, l1_col)
+        table.insert(simplification, s_col)
+        coroutine.yield()
+      end
+    end
+  ))
   
   self.representation = representation
   self.simplification = simplification
