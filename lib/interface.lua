@@ -67,7 +67,7 @@ function Interface:wait(s)
 end
 
 function Interface:_draw_cells(artifact, state)
-  if self.cells_dirty then
+  if self.cells_dirty then -- TODO unused
     local pixels
 
     if state:get('power') == 1 then

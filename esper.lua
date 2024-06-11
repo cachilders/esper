@@ -1,6 +1,7 @@
 local Artifact = include('lib/artifact')
 local Interface = include('lib/interface')
 local Mouse = include('lib/mouse')
+local Parameters = include('lib/parameters')
 local State = include('lib/state')
 
 local artifact, beat_clock_fwd, beat_clock_rev, interface, met, mouse, state
@@ -27,6 +28,11 @@ local function _init_mouse()
   mouse:init()
 end
 
+local function _init_params()
+  parameters = Parameters:new()
+  parameters:init(state, artifact)
+end
+
 local function _init_state()
   state = State:new()
   state:init()
@@ -38,6 +44,7 @@ function init()
   _init_mouse()
   _init_state()
   _init_clocks()
+  _init_params()
 end
 
 function redraw()
