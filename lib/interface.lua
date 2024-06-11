@@ -67,11 +67,11 @@ function Interface:wait(s)
 end
 
 function Interface:_draw_cells(artifact, state)
-  if self.cells_dirty then
+  if self.cells_dirty then -- TODO unused
     local pixels
 
     if state:get('power') == 1 then
-      pixels = artifact:get('simplification')
+      pixels = artifact:get_simplification()
     else
       local region = state:get('region')
       pixels = artifact:get_representation_at(region[1], region[2])

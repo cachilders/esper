@@ -1,10 +1,14 @@
 local Artifact = include('lib/artifact')
+local Colorizer = include('lib/colorizer')
 local Interface = include('lib/interface')
 local Mouse = include('lib/mouse')
+local Parameters = include('lib/parameters')
 local State = include('lib/state')
 
-local artifact, beat_clock_fwd, beat_clock_rev, interface, met, mouse, state
+local artifact, beat_clock_fwd, beat_clock_rev, colorizer, interface, met, mouse, parameters, state
 local util = require('util')
+
+engine.name = 'Asterion'
 
 local function _init_artifact()
   artifact = Artifact:new()
@@ -13,8 +17,13 @@ end
 
 local function _init_clocks()
   local beat_duration = 60 / params:get('clock_tempo')
-  beat_clock_fwd = metro.init(function() state:advance_pointer('active') end, beat_duration)
+  beat_clock_fwd = metro.init(function() state:advance_pointer('active'); colorizer:radiate(state, artifact) end, beat_duration)
   beat_clock_fwd:start()
+end
+
+local function _init_colorizer()
+  colorizer = Colorizer:new()
+  colorizer:init()
 end
 
 local function _init_interface()
@@ -27,6 +36,11 @@ local function _init_mouse()
   mouse:init()
 end
 
+local function _init_params()
+  parameters = Parameters:new()
+  parameters:init(state, artifact, colorizer)
+end
+
 local function _init_state()
   state = State:new()
   state:init()
@@ -37,6 +51,8 @@ function init()
   _init_interface()
   _init_mouse()
   _init_state()
+  _init_params()
+  _init_colorizer()
   _init_clocks()
 end
 
