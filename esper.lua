@@ -10,13 +10,17 @@ local util = require('util')
 
 engine.name = 'Asterion'
 
+local function _get_beat_duration()
+  return 60 / params:get('clock_tempo')
+end
+
 local function _init_artifact()
   artifact = Artifact:new()
   artifact:init('test.png')
 end
 
 local function _init_clocks()
-  local beat_duration = 60 / params:get('clock_tempo')
+  local beat_duration = _get_beat_duration()
   beat_clock_fwd = metro.init(function() state:advance_pointer('active'); colorizer:radiate(state, artifact) end, beat_duration)
   beat_clock_fwd:start()
 end
@@ -46,6 +50,13 @@ local function _init_state()
   state:init()
 end
 
+local function _refresh_params()
+  if state:get('dirty_clock') then
+    beat_clock_fwd.time = _get_beat_duration()
+    state:set('dirty_clock', false)
+  end
+end
+
 function init()
   _init_artifact()
   _init_interface()
@@ -57,6 +68,7 @@ function init()
 end
 
 function redraw()
+  _refresh_params()
   screen.clear()
   interface:draw(artifact, state)
   screen.update()

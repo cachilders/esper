@@ -3,6 +3,7 @@ local REGION = 'region'
 
 local State = {
   active = {1, 1},
+  dirty_clock = false,
   position = 1,
   power = 1,
   pulse = false,

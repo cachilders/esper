@@ -28,6 +28,7 @@ function Parameters:init(state, artifact, colorizer)
   self.scales = self:_get_music_scale_names()
   self:_init_character(colorizer)
   self:_init_adr()
+  params:set_action('clock_tempo', function() state:set('dirty_clock', true) end)
 end
 
 function Parameters:_init_adr()
