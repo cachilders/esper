@@ -24,29 +24,33 @@ function Parameters:new(options)
   return instance
 end
 
-function Parameters:init(state, artifact, colorizer)
+function Parameters:init(state)
   self.scales = self:_get_music_scale_names()
-  self:_init_character(colorizer)
-  self:_init_adr()
+  self:_init_character(state)
+  self:_init_adsr()
   params:set_action('clock_tempo', function() state:set('dirty_clock', true) end)
 end
 
-function Parameters:_init_adr()
-  params:add_group('envelope', 'ESPER Envelope', 3)
+function Parameters:_init_adsr()
+  params:add_group('envelope', 'ESPER Envelope', 4)
   params:add_control('attack', 'Attack', ControlSpec.new(0.01, 1, 'lin', 0, 0.05),
     function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
-  params:add_control('decay', 'Decay', ControlSpec.new(0.01, 1, 'lin', 0, 0.2),
+  params:add_control('decay', 'Decay', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
     function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
-  params:add_control('release', 'Release', ControlSpec.new(0.01, 1, 'lin', 0, 0.1),
+  params:add_control('sustain', 'Sustain', ControlSpec.new(0.01, 1, 'lin', 0, 0.5),
+    function(param) return self._quantize_and_format(param:get()*100, 0.1, '%') end)
+  params:add_control('release', 'Release', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
     function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
 end
 
-function Parameters:_init_character(colorizer)
-  params:add_group('character', 'ESPER Character', 2)
-  params:add_number('root_note', 'Root Note', 0, 127, 48, function(param) return musicutil.note_num_to_name(param:get(), true) end)
+function Parameters:_init_character(state)
+  params:add_group('character', 'ESPER Character', 3)
+  params:add_number('subdivisions', 'Beat Division', 0.25, 16, 4)
+  params:set_action('subdivisions', function() state:set('dirty_clock', true) end)
+  params:add_number('root_note', 'Root Note', 0, 127, 36, function(param) return musicutil.note_num_to_name(param:get(), true) end)
+  params:set_action('root_note', function() state:set('dirty_scale', true) end)
   params:add_option('scale', 'Scale Type', self.scales, 1)
-  params:set_action('root_note', function() colorizer:set_scale() end)
-  params:set_action('scale', function() colorizer:set_scale() end)
+  params:set_action('scale', function() state:set('dirty_scale', true) end)
 end
 
 function Parameters:_get_music_scale_names()

@@ -4,7 +4,7 @@ local COLUMNS, ROWS = 8, 8
 local utils = include('lib/utils')
 
 local Artifact = {
-  depth = 4,
+  depth = 2,
   reference = nil,
   representation = nil,
   simplification = nil
