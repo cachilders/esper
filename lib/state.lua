@@ -1,15 +1,12 @@
 local GRID_W, GRID_H = 8, 8
 local REGION = 'region'
+local util = require('util')
 
 local State = {
-<<<<<<< Updated upstream
-  active = {1, 1},
-=======
   current = nil,
   dirty_clock = false,
   dirty_scale = false,
   initialized = false,
->>>>>>> Stashed changes
   position = 1,
   power = 1,
   pulse = false,
@@ -56,6 +53,12 @@ function State:advance_pointer(key)
   else
     self[key][1] = self[key][1] + (reverse and -1 or 1)
   end
+end
+
+function State:adjust_selection(axis, delta)
+  local adjusted = axis == 'x' and 1 or 2
+  local max = axis == 'x' and GRID_W or GRID_H
+  self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
 end
 
 return State

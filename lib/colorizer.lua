@@ -26,12 +26,8 @@ function Colorizer:radiate(state, artifact) -- TODO This whole class is WIP af t
     notes = artifact:get_representation_at(region[1], region[2])
   end
 
-<<<<<<< Updated upstream
-  note = notes[active[1]][active[2]]
-
-=======
   note = notes[current[1]][current[2]]
->>>>>>> Stashed changes
+
   if note > 0 then
     engine.play_note(
       self.scale[note],

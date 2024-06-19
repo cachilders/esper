@@ -17,7 +17,7 @@ end
 
 local function _init_clocks()
   local beat_duration = 60 / params:get('clock_tempo')
-  beat_clock_fwd = metro.init(function() state:advance_pointer('active'); colorizer:radiate(state, artifact) end, beat_duration)
+  beat_clock_fwd = metro.init(function() state:advance_pointer('current'); colorizer:radiate(state, artifact) end, beat_duration)
   beat_clock_fwd:start()
 end
 
@@ -46,27 +46,6 @@ local function _init_state()
   state:init()
 end
 
-<<<<<<< Updated upstream
-=======
-local function _refresh_params()
-  if state:get('dirty_clock') then
-    beat_clock_fwd.time = _get_beat_duration()
-    state:set('dirty_clock', false)
-  end
-
-  if state:get('dirty_scale') then
-    colorizer:set_scale()
-    state:set('dirty_scale', false)
-  end
-end
-
-function on_step()
-  _refresh_params()
-  state:advance_pointer('current')
-  colorizer:radiate(state, artifact)
-end
-
->>>>>>> Stashed changes
 function init()
   _init_artifact()
   _init_interface()
@@ -88,9 +67,17 @@ function enc(e, d)
   local position = state:get('region')
   local pos_x, pos_y = position[1], position[2]
   if e == 2 then
-    pos_x = util.clamp(pos_x + d, 1, 8)
+    if state:get('power') == 1 then
+      state:adjust_selection('x', d)
+    else
+      pos_x = util.clamp(pos_x + d, 1, 8)
+    end
   elseif e == 3 then
-    pos_y = util.clamp(pos_y + d, 1, 8)
+    if state:get('power') == 1 then
+      state:adjust_selection('y', d)
+    else
+      pos_y = util.clamp(pos_y + d, 1, 8)
+    end
   end
   state:set('region', {pos_x, pos_y})
 end

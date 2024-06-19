@@ -2,8 +2,6 @@ local Mouse = {
   connection = nil
 }
 
-local util = require('util')
-
 function Mouse:new(options)
   local instance = options or {}
   setmetatable(instance, self)
@@ -15,9 +13,9 @@ function Mouse:init(state, dev)
   local function on_event(type, code, value)
     if type == 2 then -- mouse
       if code == 0  then -- x
-        state:set('selected', {util.clamp(state:get('selected')[1] + value, 1, 8), state:get('selected')[2]})
+        state:adjust_selection('x', value)
       elseif code == 1 then -- y
-        state:set('selected', {state:get('selected')[1], util.clamp(state:get('selected')[2] + value, 1, 8)})
+        state:adjust_selection('y', value)
       end
     elseif type == 1 then
       if code == 272 then -- Left click
