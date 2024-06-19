@@ -33,7 +33,7 @@ end
 
 local function _init_mouse()
   mouse = Mouse:new()
-  mouse:init()
+  mouse:init(state)
 end
 
 local function _init_params()
@@ -46,11 +46,32 @@ local function _init_state()
   state:init()
 end
 
+<<<<<<< Updated upstream
+=======
+local function _refresh_params()
+  if state:get('dirty_clock') then
+    beat_clock_fwd.time = _get_beat_duration()
+    state:set('dirty_clock', false)
+  end
+
+  if state:get('dirty_scale') then
+    colorizer:set_scale()
+    state:set('dirty_scale', false)
+  end
+end
+
+function on_step()
+  _refresh_params()
+  state:advance_pointer('current')
+  colorizer:radiate(state, artifact)
+end
+
+>>>>>>> Stashed changes
 function init()
   _init_artifact()
   _init_interface()
-  _init_mouse()
   _init_state()
+  _init_mouse()
   _init_params()
   _init_colorizer()
   _init_clocks()

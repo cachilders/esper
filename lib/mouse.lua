@@ -2,33 +2,7 @@ local Mouse = {
   connection = nil
 }
 
-function Mouse._on_event(type, code, value)
-  if type == 2 then -- mouse
-    if code == 0  then -- x
-      print('x delta '..value)
-    elseif code == 1 then -- y
-      print('y delta '..value)
-    end
-  elseif type == 1 then
-    if code == 272 then -- Left click
-      if value == 1 then -- click
-        print('left click')
-      elseif value == 2 then -- hold
-        print('left hold')
-      elseif value == 0 then -- release
-        print('left release')
-      end
-    elseif code == 273 then -- Right click
-      if value == 1 then -- click
-        print('right click')
-      elseif value == 2 then -- hold
-        print('right hold')
-      elseif value == 0 then -- release
-        print('right release')
-      end
-    end
-  end
-end
+local util = require('util')
 
 function Mouse:new(options)
   local instance = options or {}
@@ -37,9 +11,37 @@ function Mouse:new(options)
   return instance
 end
 
-function Mouse:init(dev)
-  self.connection = hid.connect(dev)
-  self.connection.event = self._on_event
+function Mouse:init(state, dev)
+  local function on_event(type, code, value)
+    if type == 2 then -- mouse
+      if code == 0  then -- x
+        state:set('selected', {util.clamp(state:get('selected')[1] + value, 1, 8), state:get('selected')[2]})
+      elseif code == 1 then -- y
+        state:set('selected', {state:get('selected')[1], util.clamp(state:get('selected')[2] + value, 1, 8)})
+      end
+    elseif type == 1 then
+      if code == 272 then -- Left click
+        if value == 1 then -- click
+          print('left click')
+        elseif value == 2 then -- hold
+          print('left hold')
+        elseif value == 0 then -- release
+          print('left release')
+        end
+      elseif code == 273 then -- Right click
+        if value == 1 then -- click
+          print('right click')
+        elseif value == 2 then -- hold
+          print('right hold')
+        elseif value == 0 then -- release
+          print('right release')
+        end
+      end
+    end
+  end
+
+  self.connection = hid.connect(dev or 1)
+  self.connection.event = on_event
 end
 
 return Mouse

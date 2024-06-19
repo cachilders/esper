@@ -2,13 +2,21 @@ local GRID_W, GRID_H = 8, 8
 local REGION = 'region'
 
 local State = {
+<<<<<<< Updated upstream
   active = {1, 1},
+=======
+  current = nil,
+  dirty_clock = false,
+  dirty_scale = false,
+  initialized = false,
+>>>>>>> Stashed changes
   position = 1,
   power = 1,
   pulse = false,
   pulse_frame = 1,
-  region = {1, 1},
+  region = nil,
   reverse = false,
+  selectecd = nil,
   shift = false,
   track = false
 }
@@ -21,7 +29,9 @@ function State:new(options)
 end
 
 function State:init()
-  -- dunno
+  self.current = {1, 1}
+  self.region = {1, 1}
+  self.selected = {1, 1}
 end
 
 function State:get(k)
