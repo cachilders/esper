@@ -4,6 +4,7 @@ local Mouse = {
 
 function Mouse.on_event(interface, state, type, code, value)
   if type == 2 then -- mouse
+    value = value < 0 and -1 or 1
     if code == 0  then -- x
       state:adjust_selection('x', value)
     elseif code == 1 then -- y
