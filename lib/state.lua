@@ -13,7 +13,7 @@ local State = {
   pulse_frame = 1,
   region = nil,
   reverse = false,
-  selectecd = nil,
+  selected = nil,
   shift = false,
   track = false
 }

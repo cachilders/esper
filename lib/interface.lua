@@ -56,8 +56,9 @@ end
 
 function Interface:enhance(state)
   -- TODO transition on bar with animtion on beats prior (zoom effect)
+  local selected = state:get('selected')
   state:set('power', 2)
-  state:set('region', state:get('selected'))
+  state:set('region', {selected[1], selected[2]})
 end
 
 function Interface:go(direction)
