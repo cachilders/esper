@@ -32,7 +32,7 @@ function Colorizer:radiate(state, artifact) -- TODO This whole class is WIP af t
     engine.play_note(
       self.scale[note],
       127,
-      60 / params:get('clock_tempo'),
+      15 / params:get('clock_tempo') * params:get('sustain'),
       params:get('attack'),
       params:get('decay'),
       1,

@@ -16,7 +16,7 @@ function Mouse.on_event(interface, state, type, code, value)
       elseif value == 2 then -- hold
         print('left hold')
       elseif value == 0 then -- release
-        interface:enhance(state) -- TODO release from hold will be different -- WIP
+        interface:pull_back(state) -- TODO release from hold will be different -- WIP
       end
     elseif code == 273 then -- Right click
       if value == 1 then -- click
@@ -24,7 +24,7 @@ function Mouse.on_event(interface, state, type, code, value)
       elseif value == 2 then -- hold
         print('right hold')
       elseif value == 0 then -- release
-        interface:pull_back(state)
+        interface:enhance(state)
       end
     end
   end
