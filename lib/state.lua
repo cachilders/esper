@@ -1,8 +1,9 @@
 local GRID_W, GRID_H = 8, 8
 local REGION = 'region'
+local util = require('util')
 
 local State = {
-  active = {1, 1},
+  current = nil,
   dirty_clock = false,
   dirty_scale = false,
   initialized = false,
@@ -10,8 +11,9 @@ local State = {
   power = 1,
   pulse = false,
   pulse_frame = 1,
-  region = {1, 1},
+  region = nil,
   reverse = false,
+  selected = nil,
   shift = false,
   track = false
 }
@@ -24,7 +26,9 @@ function State:new(options)
 end
 
 function State:init()
-  -- dunno
+  self.current = {1, 1}
+  self.region = {1, 1}
+  self.selected = {1, 1}
 end
 
 function State:get(k)
@@ -49,6 +53,12 @@ function State:advance_pointer(key)
   else
     self[key][1] = self[key][1] + (reverse and -1 or 1)
   end
+end
+
+function State:adjust_selection(axis, delta)
+  local adjusted = axis == 'x' and 1 or 2
+  local max = axis == 'x' and GRID_W or GRID_H
+  self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
 end
 
 return State

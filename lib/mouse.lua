@@ -2,12 +2,13 @@ local Mouse = {
   connection = nil
 }
 
-function Mouse._on_event(type, code, value)
+function Mouse.on_event(interface, state, type, code, value)
   if type == 2 then -- mouse
+    value = value < 0 and -1 or 1
     if code == 0  then -- x
-      print('x delta '..value)
+      state:adjust_selection('x', value)
     elseif code == 1 then -- y
-      print('y delta '..value)
+      state:adjust_selection('y', value)
     end
   elseif type == 1 then
     if code == 272 then -- Left click
@@ -16,7 +17,7 @@ function Mouse._on_event(type, code, value)
       elseif value == 2 then -- hold
         print('left hold')
       elseif value == 0 then -- release
-        print('left release')
+        interface:enhance(state) -- TODO release from hold will be different -- WIP
       end
     elseif code == 273 then -- Right click
       if value == 1 then -- click
@@ -24,7 +25,7 @@ function Mouse._on_event(type, code, value)
       elseif value == 2 then -- hold
         print('right hold')
       elseif value == 0 then -- release
-        print('right release')
+        interface:pull_back(state)
       end
     end
   end
@@ -37,9 +38,9 @@ function Mouse:new(options)
   return instance
 end
 
-function Mouse:init(dev)
-  self.connection = hid.connect(dev)
-  self.connection.event = self._on_event
+function Mouse:init(interface, state, dev)
+  self.connection = hid.connect(dev or 1)
+  self.connection.event = function(t, c, v) self.on_event(interface, state, t, c, v) end
 end
 
 return Mouse

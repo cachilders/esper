@@ -26,9 +26,15 @@ function Interface._draw_grid(state)
     screen.stroke()
   end
 
-  local hl = state:get('active')
-  x, y = ((hl[1] - 1) * GRID_EDGE) + GRID_X, ((hl[2] - 1) * GRID_EDGE) + GRID_Y
-  screen.level(15)
+  local current = state:get('current')
+  x, y = ((current[1] - 1) * GRID_EDGE) + GRID_X, ((current[2] - 1) * GRID_EDGE) + GRID_Y
+  screen.level(7)
+  screen.rect(x, y, GRID_EDGE, GRID_EDGE)
+  screen.stroke()
+
+  local selected = state:get('selected')
+  x, y = ((selected[1] - 1) * GRID_EDGE) + GRID_X, ((selected[2] - 1) * GRID_EDGE) + GRID_Y
+  screen.level(14)
   screen.rect(x, y, GRID_EDGE, GRID_EDGE)
   screen.stroke()
 end
@@ -48,13 +54,19 @@ function Interface:draw(artifact, state)
   self._draw_grid(state)
 end
 
-function Interface:enhance(x, y)
+function Interface:enhance(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  local selected = state:get('selected')
+  state:set('power', 2)
+  state:set('region', {selected[1], selected[2]})
 end
 
 function Interface:go(direction)
 end
 
-function Interface:pull_back()
+function Interface:pull_back(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  state:set('power', 1)
 end
 
 function Interface:stop()

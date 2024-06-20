@@ -37,7 +37,7 @@ end
 
 local function _init_mouse()
   mouse = Mouse:new()
-  mouse:init()
+  mouse:init(interface, state)
 end
 
 local function _init_params()
@@ -64,15 +64,15 @@ end
 
 function on_step()
   _refresh_params()
-  state:advance_pointer('active')
+  state:advance_pointer('current')
   colorizer:radiate(state, artifact)
 end
 
 function init()
   _init_artifact()
   _init_interface()
-  _init_mouse()
   _init_state()
+  _init_mouse()
   _init_params()
   _init_colorizer()
   _init_clocks()
@@ -89,10 +89,19 @@ function enc(e, d)
   local shift = state:get('shift')
   local position = state:get('region')
   local pos_x, pos_y = position[1], position[2]
+  -- There's a more sophisticated product question about this to be sorted re above/below
   if e == 2 then
-    pos_x = util.clamp(pos_x + d, 1, 8)
+    if state:get('power') == 1 then
+      state:adjust_selection('x', d)
+    else
+      pos_x = util.clamp(pos_x + d, 1, 8)
+    end
   elseif e == 3 then
-    pos_y = util.clamp(pos_y + d, 1, 8)
+    if state:get('power') == 1 then
+      state:adjust_selection('y', d)
+    else
+      pos_y = util.clamp(pos_y + d, 1, 8)
+    end
   end
   state:set('region', {pos_x, pos_y})
 end
@@ -101,9 +110,9 @@ function key(k, z)
   local shift = state:get('shift')
   if z == 0 then
     if k == 2 then
-      state:set('power', 1)
+      interface:pull_back(state)
     elseif k == 3 then
-      state:set('power', 2)
+      interface:enhance(state)
     end
   end
 end
