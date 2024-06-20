@@ -33,7 +33,7 @@ end
 
 local function _init_mouse()
   mouse = Mouse:new()
-  mouse:init(state)
+  mouse:init(interface, state)
 end
 
 local function _init_params()
@@ -66,6 +66,7 @@ function enc(e, d)
   local shift = state:get('shift')
   local position = state:get('region')
   local pos_x, pos_y = position[1], position[2]
+  -- There's a more sophisticated product question about this to be sorted re above/below
   if e == 2 then
     if state:get('power') == 1 then
       state:adjust_selection('x', d)
@@ -86,9 +87,9 @@ function key(k, z)
   local shift = state:get('shift')
   if z == 0 then
     if k == 2 then
-      state:set('power', 1)
+      interface:pull_back(state)
     elseif k == 3 then
-      state:set('power', 2)
+      interface:enhance(state)
     end
   end
 end

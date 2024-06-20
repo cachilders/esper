@@ -54,13 +54,18 @@ function Interface:draw(artifact, state)
   self._draw_grid(state)
 end
 
-function Interface:enhance(x, y)
+function Interface:enhance(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  state:set('power', 2)
+  state:set('region', state:get('selected'))
 end
 
 function Interface:go(direction)
 end
 
-function Interface:pull_back()
+function Interface:pull_back(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  state:set('power', 1)
 end
 
 function Interface:stop()
