@@ -1,6 +1,4 @@
-local ASSET_PATH = '/home/we/dust/code/esper/assets/test/'
-local COLUMNS, ROWS = 8, 8
-
+local CONST = include('lib/constants')
 local utils = include('lib/utils')
 
 local Artifact = {
@@ -18,7 +16,7 @@ function Artifact:new(options)
 end
 
 function Artifact:init(reference)
-  local reflection = screen.load_png(ASSET_PATH..reference)
+  local reflection = screen.load_png(CONST.ASSET_PATH_ARTIFACT_DEFAULT..reference)
   local representation = {}
   local simplification = {}
   local function run_thread(routine)
@@ -33,20 +31,20 @@ function Artifact:init(reference)
 
   run_thread(coroutine.create(
     function()
-      for i = 1, COLUMNS do
+      for i = 1, CONST.COLUMNS do
         local l1_col = {}
         local s_col = {}
-        for j = 1, ROWS do
+        for j = 1, CONST.ROWS do
           local l1_row = {}
-          for k = 1, COLUMNS do
+          for k = 1, CONST.COLUMNS do
             local l2_col = {}
-            for l = 1, ROWS do
-              table.insert(l2_col, utils.get_pixel_at(reflection, (i - 1) * COLUMNS + k, (j - 1) * ROWS + l))
+            for l = 1, CONST.ROWS do
+              table.insert(l2_col, utils.get_pixel_at(reflection, (i - 1) * CONST.COLUMNS + k, (j - 1) * CONST.ROWS + l))
             end
             table.insert(l1_row, l2_col)
           end
           table.insert(l1_col, l1_row)
-          table.insert(s_col, utils.matrix(l1_row, 'median'))
+          table.insert(s_col, utils.matrix(l1_row, CONST.MEDIAN))
         end
         table.insert(representation, l1_col)
         table.insert(simplification, s_col)

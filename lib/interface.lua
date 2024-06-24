@@ -1,17 +1,17 @@
-local ASSET_PATH = '/home/we/dust/code/esper/assets/ui/'
-local GRID_EDGE, GRID_X, GRID_Y, GRID_C, GRID_R = 6, 5, 13, 8, 8
+local CONST = include('lib/constants')
+local GRID_EDGE, GRID_X, GRID_Y = 6, 5, 13
 
 local Interface = {
   cells_dirty = true
 }
 
 function Interface._draw_grid(state)
-  screen.display_png(ASSET_PATH..'screen_bg.png', 0, 0)
+  screen.display_png(CONST.ASSET_PATH_UI..'screen_bg.png', 0, 0)
   screen.level(state:get('pulse') and 5 or 1)
 
   local x, y = GRID_X, GRID_Y
-  local grid_h, grid_w = GRID_R * GRID_EDGE, GRID_C * GRID_EDGE
-  for i = 1, GRID_R + 1 do
+  local grid_h, grid_w = CONST.ROWS * GRID_EDGE, CONST.COLUMNS * GRID_EDGE
+  for i = 1, CONST.ROWS + 1 do
     screen.move(x, y)
     screen.line(grid_w + x, y)
     y = y + GRID_EDGE
@@ -19,20 +19,20 @@ function Interface._draw_grid(state)
   end
 
   x, y = GRID_X, GRID_Y
-  for i = 1, GRID_C + 1 do
+  for i = 1, CONST.COLUMNS + 1 do
     screen.move(x, y)
     screen.line(x, grid_h + y)
     x = x + GRID_EDGE
     screen.stroke()
   end
 
-  local current = state:get('current')
+  local current = state:get(CONST.CURRENT)
   x, y = ((current[1] - 1) * GRID_EDGE) + GRID_X, ((current[2] - 1) * GRID_EDGE) + GRID_Y
   screen.level(7)
   screen.rect(x, y, GRID_EDGE, GRID_EDGE)
   screen.stroke()
 
-  local selected = state:get('selected')
+  local selected = state:get(CONST.SELECTED)
   x, y = ((selected[1] - 1) * GRID_EDGE) + GRID_X, ((selected[2] - 1) * GRID_EDGE) + GRID_Y
   screen.level(14)
   screen.rect(x, y, GRID_EDGE, GRID_EDGE)
@@ -56,9 +56,9 @@ end
 
 function Interface:enhance(state)
   -- TODO transition on bar with animtion on beats prior (zoom effect)
-  local selected = state:get('selected')
-  state:set('power', 2)
-  state:set('region', {selected[1], selected[2]})
+  local selected = state:get(CONST.SELECTED)
+  state:set(CONST.POWER, 2)
+  state:set(CONST.REGION, {selected[1], selected[2]})
 end
 
 function Interface:go(direction)
@@ -66,7 +66,7 @@ end
 
 function Interface:pull_back(state)
   -- TODO transition on bar with animtion on beats prior (zoom effect)
-  state:set('power', 1)
+  state:set(CONST.POWER, 1)
 end
 
 function Interface:stop()
@@ -82,15 +82,15 @@ function Interface:_draw_cells(artifact, state)
   if self.cells_dirty then -- TODO unused
     local pixels
 
-    if state:get('power') == 1 then
+    if state:get(CONST.POWER) == 1 then
       pixels = artifact:get_simplification()
     else
-      local region = state:get('region')
+      local region = state:get(CONST.REGION)
       pixels = artifact:get_representation_at(region[1], region[2])
     end
 
-    for i = 1, GRID_R do
-      for j = 1, GRID_C do
+    for i = 1, CONST.ROWS do
+      for j = 1, CONST.COLUMNS do
         screen.level(pixels[i][j])
         screen.rect((GRID_EDGE * (i - 1)) + GRID_X, (GRID_EDGE * (j - 1)) + GRID_Y, 5, 5)
         screen.fill()

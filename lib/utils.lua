@@ -1,3 +1,4 @@
+local CONST = include('lib/constants')
 local utils = {}
 
 function utils.get_pixel_at(img_buff, x, y)
@@ -8,7 +9,7 @@ function utils.get_pixel_at(img_buff, x, y)
 end
 
 function utils.matrix(m, method)
-  if method == 'mean' then
+  if method == CONST.MEAN then
     local sum = 0
     local count = 0
     for i = 1, #m do
@@ -19,7 +20,7 @@ function utils.matrix(m, method)
       end
     end
     return math.floor(sum / count)
-  elseif method == 'median' then
+  elseif method == CONST.MEDIAN then
     local vals = {}
     local total = #m * #m[1]
     local mid = math.floor(total / 2)
@@ -41,7 +42,7 @@ function utils.matrix(m, method)
     end
 
     return median
-  elseif method == 'mode' then
+  elseif method == CONST.MODE then
     local vals = {}
     local mode = 1
     for i = 1, #m do
