@@ -1,5 +1,6 @@
 local Artifact = include('lib/artifact')
 local Colorizer = include('lib/colorizer')
+local CONST = include('lib/constants')
 local Interface = include('lib/interface')
 local Mouse = include('lib/mouse')
 local Parameters = include('lib/parameters')
@@ -51,20 +52,20 @@ local function _init_state()
 end
 
 local function _refresh_params()
-  if state:get('dirty_clock') then
+  if state:get(CONST.DIRTY_CLOCK) then
     beat_clock_fwd.time = _get_beat_duration()
-    state:set('dirty_clock', false)
+    state:set(CONST.DIRTY_CLOCK, false)
   end
 
-  if state:get('dirty_scale') then
+  if state:get(CONST.DIRTY_SCALE) then
     colorizer:set_scale()
-    state:set('dirty_scale', false)
+    state:set(CONST.DIRTY_SCALE, false)
   end
 end
 
 function on_step()
   _refresh_params()
-  state:advance_pointer('current')
+  state:advance_pointer(CONST.CURRENT)
   colorizer:radiate(state, artifact)
 end
 
@@ -86,28 +87,28 @@ function redraw()
 end
 
 function enc(e, d)
-  local shift = state:get('shift')
-  local position = state:get('region')
+  local shift = state:get(CONST.SHIFT)
+  local position = state:get(CONST.REGION)
   local pos_x, pos_y = position[1], position[2]
   -- There's a more sophisticated product question about this to be sorted re above/below
   if e == 2 then
-    if state:get('power') == 1 then
-      state:adjust_selection('x', d)
+    if state:get(CONST.POWER) == 1 then
+      state:adjust_selection(CONST.X, d)
     else
       pos_x = util.clamp(pos_x + d, 1, 8)
     end
   elseif e == 3 then
-    if state:get('power') == 1 then
-      state:adjust_selection('y', d)
+    if state:get(CONST.POWER) == 1 then
+      state:adjust_selection(CONST.Y, d)
     else
       pos_y = util.clamp(pos_y + d, 1, 8)
     end
   end
-  state:set('region', {pos_x, pos_y})
+  state:set(CONST.REGION, {pos_x, pos_y})
 end
 
 function key(k, z)
-  local shift = state:get('shift')
+  local shift = state:get(CONST.SHIFT)
   if z == 0 then
     if k == 2 then
       interface:pull_back(state)

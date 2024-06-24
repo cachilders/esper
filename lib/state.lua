@@ -1,5 +1,4 @@
-local GRID_W, GRID_H = 8, 8
-local REGION = 'region'
+local CONST = include('lib/constants')
 local util = require('util')
 
 local State = {
@@ -41,14 +40,14 @@ end
 
 function State:advance_pointer(key)
   local reverse = self.reverse
-  if self[key][1] == (reverse and 1 or GRID_W) then
-    if self[key][2] == (reverse and 1 or GRID_H) then
+  if self[key][1] == (reverse and 1 or CONST.COLUMNS) then
+    if self[key][2] == (reverse and 1 or CONST.ROWS) then
       if key ~= REGION and self.power == 2 and self.track then
         self:advance_pointer(REGION)
       end
-      self[key] = reverse and {GRID_W, GRID_H} or {1, 1}
+      self[key] = reverse and {CONST.COLUMNS, CONST.ROWS} or {1, 1}
     else
-      self[key] = {reverse and GRID_W or 1, self[key][2] + (reverse and -1 or 1)}
+      self[key] = {reverse and CONST.COLUMNS or 1, self[key][2] + (reverse and -1 or 1)}
     end
   else
     self[key][1] = self[key][1] + (reverse and -1 or 1)
@@ -56,8 +55,8 @@ function State:advance_pointer(key)
 end
 
 function State:adjust_selection(axis, delta)
-  local adjusted = axis == 'x' and 1 or 2
-  local max = axis == 'x' and GRID_W or GRID_H
+  local adjusted = axis == CONST.X and 1 or 2
+  local max = axis == CONST.X and CONST.COLUMNS or CONST.ROWS
   self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
 end
 

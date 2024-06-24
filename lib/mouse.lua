@@ -1,3 +1,5 @@
+local CONST = include('lib/constants')
+
 local Mouse = {
   connection = nil
 }
@@ -6,9 +8,9 @@ function Mouse.on_event(interface, state, type, code, value)
   if type == 2 then -- mouse
     value = value < 0 and -1 or 1
     if code == 0  then -- x
-      state:adjust_selection('x', value)
+      state:adjust_selection(CONST.X, value)
     elseif code == 1 then -- y
-      state:adjust_selection('y', value)
+      state:adjust_selection(CONST.Y, value)
     end
   elseif type == 1 then
     if code == 272 then -- Left click

@@ -1,4 +1,5 @@
-musicutil = require('musicutil')
+local CONST = include('lib/constants')
+local musicutil = require('musicutil')
 
 local Colorizer = {
   scale = nil
@@ -17,12 +18,12 @@ end
 
 function Colorizer:radiate(state, artifact) -- TODO This whole class is WIP af to prove stuff works
   local notes, note
-  local current = state:get('current')
+  local current = state:get(CONST.CURRENT)
 
-  if state:get('power') == 1 then
+  if state:get(CONST.POWER) == 1 then
     notes = artifact:get_simplification()
   else
-    local region = state:get('region')
+    local region = state:get(CONST.REGION)
     notes = artifact:get_representation_at(region[1], region[2])
   end
 
