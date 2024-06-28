@@ -54,28 +54,17 @@ function Interface:draw(artifact, state)
   self._draw_grid(state)
 end
 
-function Interface:enhance(state)
-  -- TODO transition on bar with animtion on beats prior (zoom effect)
-  local selected = state:get(CONST.SELECTED)
-  state:set(CONST.POWER, 2)
-  state:set(CONST.REGION, {selected[1], selected[2]})
+
+function Interface:toggle_depth(state)
+  if state:get(CONST.POWER) == 1 then
+    self:_enhance(state)
+  else
+    self:_pull_back(state)
+  end
 end
 
-function Interface:go(direction)
-end
-
-function Interface:pull_back(state)
-  -- TODO transition on bar with animtion on beats prior (zoom effect)
-  state:set(CONST.POWER, 1)
-end
-
-function Interface:stop()
-end
-
-function Interface:track(angle, direction)
-end
-
-function Interface:wait(s)
+function Interface:toggle_menu(state)
+  print('toggling menu')
 end
 
 function Interface:_draw_cells(artifact, state)
@@ -97,6 +86,30 @@ function Interface:_draw_cells(artifact, state)
       end
     end
   end
+end
+
+function Interface:_enhance(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  local selected = state:get(CONST.SELECTED)
+  state:set(CONST.POWER, 2)
+  state:set(CONST.REGION, {selected[1], selected[2]})
+end
+
+function Interface:_go(direction)
+end
+
+function Interface:_pull_back(state)
+  -- TODO transition on bar with animtion on beats prior (zoom effect)
+  state:set(CONST.POWER, 1)
+end
+
+function Interface:_stop()
+end
+
+function Interface:_track(angle, direction)
+end
+
+function Interface:_wait(s)
 end
 
 return Interface

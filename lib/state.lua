@@ -6,6 +6,7 @@ local State = {
   dirty_clock = false,
   dirty_scale = false,
   initialized = false,
+  menu = false,
   position = 1,
   power = 1,
   pulse = false,
