@@ -52,6 +52,7 @@ end
 function Interface:draw(artifact, state)
   self:_draw_cells(artifact, state)
   self._draw_grid(state)
+  self:_draw_menu(state)
 end
 
 
@@ -64,7 +65,7 @@ function Interface:toggle_depth(state)
 end
 
 function Interface:toggle_menu(state)
-  print('toggling menu')
+  state:set('menu', not state:get('menu'))
 end
 
 function Interface:_draw_cells(artifact, state)
@@ -85,6 +86,12 @@ function Interface:_draw_cells(artifact, state)
         screen.fill()
       end
     end
+  end
+end
+
+function Interface:_draw_menu(state)
+  if state:get('menu') then
+    print('drawing menu')
   end
 end
 
