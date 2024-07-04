@@ -14,6 +14,7 @@ return {
   MEDIAN = 'median',
   MEAN = 'mean',
   MENU = 'menu',
+  MENU_ITEM_COUNT = 5,
   MODE = 'mode',
   PLAY = 'play_',
   POWER = 'power',
@@ -23,6 +24,8 @@ return {
   SELECTED = 'selected',
   SHIFT = 'shift',
   STOP = 'stop_',
+  TRACK = 'track_',
+  TRACKING = 'tracking',
   X = 'x',
   Y = 'y'
 }

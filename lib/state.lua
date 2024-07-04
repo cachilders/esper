@@ -18,7 +18,7 @@ local State = {
   reverse = false,
   selected = nil,
   shift = false,
-  track = false
+  tracking = false
 }
 
 function State:new(options)
@@ -50,8 +50,9 @@ function State:advance_pointer(key)
   local reverse = self.reverse
   if self[key][1] == (reverse and 1 or CONST.COLUMNS) then
     if self[key][2] == (reverse and 1 or CONST.ROWS) then
-      if key ~= REGION and self.power == 2 and self.track then
-        self:advance_pointer(REGION)
+      if key ~= CONST.REGION and self.power == 2 and self.tracking then
+        self:advance_pointer(CONST.REGION)
+        self.selected = self.region
       end
       self[key] = reverse and {CONST.COLUMNS, CONST.ROWS} or {1, 1}
     else
@@ -69,7 +70,7 @@ function State:adjust_selection(axis, delta)
 end
 
 function State:traverse_menu(delta)
-  self.active_menu_item = util.clamp(self.active_menu_item + delta, 1 , 4)
+  self.active_menu_item = util.clamp(self.active_menu_item + delta, 1 , CONST.MENU_ITEM_COUNT)
 end
 
 return State

@@ -64,11 +64,17 @@ function Interface:select_menu_item(state)
     {'playing', true},
     {'playing', false},
     {'reverse', false},
-    {'reverse', true}
+    {'reverse', true},
   }
-  local action = menu_items[state:get('active_menu_item')]
+  local item = state:get('active_menu_item')
 
-  state:set(action[1], action[2])
+  if item < 5 then
+    local action = menu_items[item]
+    state:set(action[1], action[2])
+  else
+    self:toggle_tracking(state)
+  end
+
   self:toggle_menu(state)
 end
 
@@ -81,8 +87,12 @@ function Interface:toggle_depth(state)
 end
 
 function Interface:toggle_menu(state)
-  state:set('menu', not state:get(CONST.MENU))
+  state:set(CONST.MENU, not state:get(CONST.MENU))
   state:set('active_menu_item', 1)
+end
+
+function Interface:toggle_tracking(state)
+  state:set(CONST.TRACKING, not state:get(CONST.TRACKING))
 end
 
 function Interface:_draw_beat(state)
@@ -118,12 +128,14 @@ function Interface:_draw_menu(state)
     local active = state:get('active_menu_item')
     local playing = state:get('playing')
     local reverse = state:get('reverse')
-    local menu_items = {'PLAY', 'STOP', 'FORWARD', 'REVERSE'}
+    local track = state:get(CONST.TRACKING)
+    local menu_items = {'PLAY', 'STOP', 'FORWARD', 'REVERSE', 'TRACK'}
     local menu_item_paths = {
       CONST[menu_items[1]]..(playing and CONST.ACTIVE or CONST.INACTIVE),
       CONST[menu_items[2]]..(playing and CONST.INACTIVE or CONST.ACTIVE),
       CONST[menu_items[3]]..(reverse and CONST.INACTIVE or CONST.ACTIVE),
-      CONST[menu_items[4]]..(reverse and CONST.ACTIVE or CONST.INACTIVE)
+      CONST[menu_items[4]]..(reverse and CONST.ACTIVE or CONST.INACTIVE),
+      CONST[menu_items[5]]..(track and CONST.ACTIVE or CONST.INACTIVE)
     }
     local x = (GRID_EDGE * (anchor[1] - 1)) + GRID_X
     local y = (GRID_EDGE * (anchor[2] - 1)) + GRID_Y

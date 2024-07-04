@@ -96,21 +96,17 @@ function enc(e, d)
   local position = state:get(CONST.REGION)
   local pos_x, pos_y = position[1], position[2]
   -- There's a more sophisticated product question about this to be sorted re above/below
-  if e == 2 then
-    if menu then
-      state:traverse_menu(d)
-    else
-      state:adjust_selection(CONST.X, d)
-      if state:get(CONST.POWER) == 2 then
-        pos_x = util.clamp(pos_x + d, 1, 8)
-      end
+  if menu then
+    state:traverse_menu(d)
+  elseif e == 2 then
+    state:adjust_selection(CONST.X, d)
+    if state:get(CONST.POWER) == 2 then
+      pos_x = util.clamp(pos_x + d, 1, 8)
     end
   elseif e == 3 then
-    if not menu then
-      state:adjust_selection(CONST.Y, d)
-      if state:get(CONST.POWER) == 2 then
-        pos_y = util.clamp(pos_y + d, 1, 8)
-      end
+    state:adjust_selection(CONST.Y, d)
+    if state:get(CONST.POWER) == 2 then
+      pos_y = util.clamp(pos_y + d, 1, 8)
     end
   end
   state:set(CONST.REGION, {pos_x, pos_y})
