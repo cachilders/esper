@@ -2,11 +2,13 @@ local CONST = include('lib/constants')
 local util = require('util')
 
 local State = {
+  active_menu = 1,
   current = nil,
   dirty_clock = false,
   dirty_scale = false,
   initialized = false,
   menu = false,
+  playing = false,
   position = 1,
   power = 1,
   pulse = false,
@@ -59,6 +61,9 @@ function State:adjust_selection(axis, delta)
   local adjusted = axis == CONST.X and 1 or 2
   local max = axis == CONST.X and CONST.COLUMNS or CONST.ROWS
   self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
+end
+
+function State:traverse_menu(delta)
 end
 
 return State
