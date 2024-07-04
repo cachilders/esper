@@ -118,26 +118,31 @@ function Interface:_draw_menu(state)
     local active = state:get('active_menu_item')
     local playing = state:get('playing')
     local reverse = state:get('reverse')
-    local menu_items = {
-      CONST.PLAY..(playing and CONST.ACTIVE or CONST.INACTIVE),
-      CONST.STOP..(playing and CONST.INACTIVE or CONST.ACTIVE),
-      CONST.FORWARD..(reverse and CONST.INACTIVE or CONST.ACTIVE),
-      CONST.REVERSE..(reverse and CONST.ACTIVE or CONST.INACTIVE)
+    local menu_items = {'PLAY', 'STOP', 'FORWARD', 'REVERSE'}
+    local menu_item_paths = {
+      CONST[menu_items[1]]..(playing and CONST.ACTIVE or CONST.INACTIVE),
+      CONST[menu_items[2]]..(playing and CONST.INACTIVE or CONST.ACTIVE),
+      CONST[menu_items[3]]..(reverse and CONST.INACTIVE or CONST.ACTIVE),
+      CONST[menu_items[4]]..(reverse and CONST.ACTIVE or CONST.INACTIVE)
     }
     local x = (GRID_EDGE * (anchor[1] - 1)) + GRID_X
     local y = (GRID_EDGE * (anchor[2] - 1)) + GRID_Y
 
-    for i = 1, #menu_items do
+    for i = 1, #menu_item_paths do
       local ix = i * 5 + x
       screen.level(7)
       screen.rect(ix + i - 1, y - 1, 7, 7)
       screen.fill()
-      screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..menu_items[i]..'.png', ix + i, y)
+      screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..menu_item_paths[i]..'.png', ix + i, y)
     end
 
     screen.level(14)
     screen.rect(active * 5 + x + active, y, 6, 6)
     screen.stroke()
+
+    screen.level(14)
+    screen.move(120, 5)
+    screen.text_right(menu_items[active])
   end
 end
 
