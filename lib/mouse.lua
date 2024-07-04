@@ -1,16 +1,24 @@
 local CONST = include('lib/constants')
 
 local Mouse = {
-  connection = nil
+  connection = nil,
 }
 
 function Mouse.on_event(interface, state, type, code, value)
+  local menu = state:get(CONST.MENU)
+
   if type == 2 then -- mouse
     value = value < 0 and -1 or 1
     if code == 0  then -- x
-      state:adjust_selection(CONST.X, value)
+      if menu then
+        state:traverse_menu(value)
+      else
+        state:adjust_selection(CONST.X, value)
+      end
     elseif code == 1 then -- y
-      state:adjust_selection(CONST.Y, value)
+      if not menu then
+        state:adjust_selection(CONST.Y, value)
+      end
     end
   elseif type == 1 then
     if code == 272 then -- Left click
@@ -19,7 +27,11 @@ function Mouse.on_event(interface, state, type, code, value)
       elseif value == 2 then -- hold
         print('left hold')
       elseif value == 0 then -- release
-        interface:enhance(state) -- TODO release from hold will be different -- WIP
+        if menu then
+          interface:select_menu_item(state)
+        else
+          interface:toggle_depth(state)
+        end
       end
     elseif code == 273 then -- Right click
       if value == 1 then -- click
@@ -27,7 +39,7 @@ function Mouse.on_event(interface, state, type, code, value)
       elseif value == 2 then -- hold
         print('right hold')
       elseif value == 0 then -- release
-        interface:pull_back(state)
+        interface:toggle_menu(state)
       end
     end
   end

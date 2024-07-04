@@ -6,7 +6,7 @@ local Mouse = include('lib/mouse')
 local Parameters = include('lib/parameters')
 local State = include('lib/state')
 
-local artifact, beat_clock_fwd, beat_clock_rev, colorizer, interface, met, mouse, parameters, state
+local artifact, beat_clock, colorizer, interface, met, mouse, parameters, state
 local util = require('util')
 
 engine.name = 'Asterion'
@@ -22,8 +22,8 @@ end
 
 local function _init_clocks()
   local beat_duration = _get_beat_duration()
-  beat_clock_fwd = metro.init(function() on_step() end, beat_duration)
-  beat_clock_fwd:start()
+  beat_clock = metro.init(function() on_step() end, beat_duration)
+  beat_clock:start()
 end
 
 local function _init_colorizer()
@@ -53,7 +53,7 @@ end
 
 local function _refresh_params()
   if state:get(CONST.DIRTY_CLOCK) then
-    beat_clock_fwd.time = _get_beat_duration()
+    beat_clock.time = _get_beat_duration()
     state:set(CONST.DIRTY_CLOCK, false)
   end
 
@@ -65,8 +65,12 @@ end
 
 function on_step()
   _refresh_params()
-  state:advance_pointer(CONST.CURRENT)
-  colorizer:radiate(state, artifact)
+
+  if state:get('playing') then
+    state:advance_beat()
+    state:advance_pointer(CONST.CURRENT)
+    colorizer:radiate(state, artifact)
+  end
 end
 
 function init()
@@ -87,21 +91,28 @@ function redraw()
 end
 
 function enc(e, d)
+  local menu = state:get(CONST.MENU)
   local shift = state:get(CONST.SHIFT)
   local position = state:get(CONST.REGION)
   local pos_x, pos_y = position[1], position[2]
   -- There's a more sophisticated product question about this to be sorted re above/below
   if e == 2 then
-    if state:get(CONST.POWER) == 1 then
-      state:adjust_selection(CONST.X, d)
+    if menu then
+      state:traverse_menu(d)
     else
-      pos_x = util.clamp(pos_x + d, 1, 8)
+      if state:get(CONST.POWER) == 1 then
+        state:adjust_selection(CONST.X, d)
+      else
+        pos_x = util.clamp(pos_x + d, 1, 8)
+      end
     end
   elseif e == 3 then
-    if state:get(CONST.POWER) == 1 then
-      state:adjust_selection(CONST.Y, d)
-    else
-      pos_y = util.clamp(pos_y + d, 1, 8)
+    if not menu then
+      if state:get(CONST.POWER) == 1 then
+        state:adjust_selection(CONST.Y, d)
+      else
+        pos_y = util.clamp(pos_y + d, 1, 8)
+      end
     end
   end
   state:set(CONST.REGION, {pos_x, pos_y})
@@ -109,11 +120,16 @@ end
 
 function key(k, z)
   local shift = state:get(CONST.SHIFT)
+  local menu = state:get(CONST.MENU)
   if z == 0 then
     if k == 2 then
-      interface:pull_back(state)
+      if menu then
+        interface:select_menu_item(state)
+      else
+        interface:toggle_depth(state)
+      end
     elseif k == 3 then
-      interface:enhance(state)
+      interface:toggle_menu(state)
     end
   end
 end
