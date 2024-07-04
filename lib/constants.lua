@@ -13,6 +13,7 @@ return {
   INACTIVE = 'inactive',
   MEDIAN = 'median',
   MEAN = 'mean',
+  MENU = 'menu',
   MODE = 'mode',
   PLAY = 'play_',
   POWER = 'power',

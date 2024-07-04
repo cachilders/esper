@@ -6,7 +6,10 @@ local Interface = {
 }
 
 function Interface._draw_grid(state)
-  screen.display_png(CONST.ASSET_PATH_UI..'screen_bg.png', 0, 0)
+  if not state:get(CONST.MENU) then
+    screen.display_png(CONST.ASSET_PATH_UI..'screen_bg.png', 0, 0)
+  end
+
   screen.level(state:get('pulse') and 5 or 1)
 
   local x, y = GRID_X, GRID_Y
@@ -34,7 +37,7 @@ function Interface._draw_grid(state)
 
   local selected = state:get(CONST.SELECTED)
   x, y = ((selected[1] - 1) * GRID_EDGE) + GRID_X, ((selected[2] - 1) * GRID_EDGE) + GRID_Y
-  screen.level(state:get('menu') and 7 or 14)
+  screen.level(state:get(CONST.MENU) and 1 or 14)
   screen.rect(x, y, GRID_EDGE, GRID_EDGE)
   screen.stroke()
 end
@@ -50,13 +53,23 @@ function Interface:init()
 end
 
 function Interface:draw(artifact, state)
+  self:_draw_beat(state)
   self:_draw_cells(artifact, state)
   self._draw_grid(state)
   self:_draw_menu(state)
 end
 
 function Interface:select_menu_item(state)
-  
+  local menu_items = {
+    {'playing', true},
+    {'playing', false},
+    {'reverse', false},
+    {'reverse', true}
+  }
+  local action = menu_items[state:get('active_menu_item')]
+
+  state:set(action[1], action[2])
+  self:toggle_menu(state)
 end
 
 function Interface:toggle_depth(state)
@@ -68,11 +81,17 @@ function Interface:toggle_depth(state)
 end
 
 function Interface:toggle_menu(state)
-  state:set('menu', not state:get('menu'))
+  state:set('menu', not state:get(CONST.MENU))
+  state:set('active_menu_item', 1)
+end
+
+function Interface:_draw_beat(state)
+  screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..CONST.BEAT..state:get('beat')..'.png', 123, 0)
 end
 
 function Interface:_draw_cells(artifact, state)
   if self.cells_dirty then -- TODO unused
+    local menu = state:get(CONST.MENU)
     local pixels
 
     if state:get(CONST.POWER) == 1 then
@@ -84,7 +103,8 @@ function Interface:_draw_cells(artifact, state)
 
     for i = 1, CONST.ROWS do
       for j = 1, CONST.COLUMNS do
-        screen.level(pixels[i][j])
+        local level = menu and math.floor(pixels[i][j] / 4) or pixels[i][j]
+        screen.level(level)
         screen.rect((GRID_EDGE * (i - 1)) + GRID_X, (GRID_EDGE * (j - 1)) + GRID_Y, 5, 5)
         screen.fill()          
       end
@@ -93,30 +113,32 @@ function Interface:_draw_cells(artifact, state)
 end
 
 function Interface:_draw_menu(state)
-  local anchor = state:get('selected')
-  local active = state:get('active_menu')
-  local playing = state:get('playing')
-  local reverse = state:get('reverse')
-  local MENU_ITEMS = {
-    CONST.PLAY..(playing and CONST.ACTIVE or CONST.INACTIVE),
-    CONST.STOP..(not playing and CONST.INACTIVE or CONST.ACTIVE),
-    CONST.FORWARD..(reverse and CONST.INACTIVE or CONST.ACTIVE),
-    CONST.REVERSE..(reverse and CONST.ACTIVE or CONST.INACTIVE)
-  }
-  local x = (GRID_EDGE * (anchor[1] - 1)) + GRID_X
-  local y = (GRID_EDGE * (anchor[2] - 1)) + GRID_Y
+  if state:get(CONST.MENU) then
+    local anchor = state:get('selected')
+    local active = state:get('active_menu_item')
+    local playing = state:get('playing')
+    local reverse = state:get('reverse')
+    local menu_items = {
+      CONST.PLAY..(playing and CONST.ACTIVE or CONST.INACTIVE),
+      CONST.STOP..(playing and CONST.INACTIVE or CONST.ACTIVE),
+      CONST.FORWARD..(reverse and CONST.INACTIVE or CONST.ACTIVE),
+      CONST.REVERSE..(reverse and CONST.ACTIVE or CONST.INACTIVE)
+    }
+    local x = (GRID_EDGE * (anchor[1] - 1)) + GRID_X
+    local y = (GRID_EDGE * (anchor[2] - 1)) + GRID_Y
 
-  for i = 1, #MENU_ITEMS do
-    local ix = i * 5 + x
-    screen.level(7)
-    screen.rect(ix + i - 1, y - 1, 7, 7)
-    screen.fill()
-    screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..MENU_ITEMS[i]..'.png', ix + i, y)
+    for i = 1, #menu_items do
+      local ix = i * 5 + x
+      screen.level(7)
+      screen.rect(ix + i - 1, y - 1, 7, 7)
+      screen.fill()
+      screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..menu_items[i]..'.png', ix + i, y)
+    end
+
+    screen.level(14)
+    screen.rect(active * 5 + x + active, y, 6, 6)
+    screen.stroke()
   end
-
-  screen.level(14)
-  screen.rect(active * 5 + x + active, y, 6, 6)
-  screen.stroke()
 end
 
 function Interface:_enhance(state)

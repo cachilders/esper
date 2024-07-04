@@ -5,7 +5,7 @@ local Mouse = {
 }
 
 function Mouse.on_event(interface, state, type, code, value)
-  local menu = state:get('menu')
+  local menu = state:get(CONST.MENU)
 
   if type == 2 then -- mouse
     value = value < 0 and -1 or 1
