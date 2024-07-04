@@ -100,17 +100,15 @@ function enc(e, d)
     if menu then
       state:traverse_menu(d)
     else
-      if state:get(CONST.POWER) == 1 then
-        state:adjust_selection(CONST.X, d)
-      else
+      state:adjust_selection(CONST.X, d)
+      if state:get(CONST.POWER) == 2 then
         pos_x = util.clamp(pos_x + d, 1, 8)
       end
     end
   elseif e == 3 then
     if not menu then
-      if state:get(CONST.POWER) == 1 then
-        state:adjust_selection(CONST.Y, d)
-      else
+      state:adjust_selection(CONST.Y, d)
+      if state:get(CONST.POWER) == 2 then
         pos_y = util.clamp(pos_y + d, 1, 8)
       end
     end
