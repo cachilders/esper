@@ -1,4 +1,5 @@
 local CONST = include('lib/constants')
+local musicutil = require('musicutil')
 local util = require('util')
 
 local State = {
@@ -6,8 +7,7 @@ local State = {
   beat = 1,
   current = nil,
   dirty_clock = false,
-  dirty_scale = false,
-  initialized = false,
+  dirty_scale = true,
   menu = false,
   playing = false,
   position = 1,
@@ -17,6 +17,7 @@ local State = {
   region = nil,
   reverse = false,
   selected = nil,
+  scale = nil,
   shift = false,
   tracking = false
 }
@@ -67,6 +68,24 @@ function State:adjust_selection(axis, delta)
   local adjusted = axis == CONST.X and 1 or 2
   local max = axis == CONST.X and CONST.COLUMNS or CONST.ROWS
   self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
+end
+
+function State:grok_current_note(artifact)
+  local tiles
+  local current = self.current
+
+  if self.power == 1 then
+    tiles = artifact:get_simplification()
+  else
+    local region = self.region
+    tiles = artifact:get_representation_at(region[1], region[2])
+  end
+
+  return self.scale[tiles[current[1]][current[2]]]
+end
+
+function State:set_scale()
+  self.scale = musicutil.generate_scale_of_length(params:get('root_note'), params:get('scale'), 16)
 end
 
 function State:traverse_menu(delta)

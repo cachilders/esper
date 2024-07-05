@@ -1,5 +1,4 @@
 local CONST = include('lib/constants')
-local musicutil = require('musicutil')
 
 local Colorizer = {
   scale = nil
@@ -13,25 +12,12 @@ function Colorizer:new(options)
 end
 
 function Colorizer:init()
-  self:set_scale()
 end
 
-function Colorizer:radiate(state, artifact) -- TODO This whole class is WIP af to prove stuff works
-  local notes, note
-  local current = state:get(CONST.CURRENT)
-
-  if state:get(CONST.POWER) == 1 then
-    notes = artifact:get_simplification()
-  else
-    local region = state:get(CONST.REGION)
-    notes = artifact:get_representation_at(region[1], region[2])
-  end
-
-  note = notes[current[1]][current[2]]
-
-  if note > 0 then
+function Colorizer:radiate(note) -- TODO This whole class is WIP af to prove stuff works
+  if note then
     engine.play_note(
-      self.scale[note],
+      note,
       127,
       15 / params:get('clock_tempo') * params:get('sustain'),
       params:get('attack'),
@@ -40,10 +26,6 @@ function Colorizer:radiate(state, artifact) -- TODO This whole class is WIP af t
       params:get('release')
     )
   end
-end
-
-function Colorizer:set_scale()
-  self.scale = musicutil.generate_scale_of_length(params:get('root_note'), params:get('scale'), 16)
 end
 
 return Colorizer
