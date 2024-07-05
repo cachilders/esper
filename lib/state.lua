@@ -1,4 +1,5 @@
 local CONST = include('lib/constants')
+local musicutil = require('musicutil')
 local util = require('util')
 
 local State = {
@@ -6,8 +7,7 @@ local State = {
   beat = 1,
   current = nil,
   dirty_clock = false,
-  dirty_scale = false,
-  initialized = false,
+  dirty_scale = true,
   menu = false,
   playing = false,
   position = 1,
@@ -17,8 +17,9 @@ local State = {
   region = nil,
   reverse = false,
   selected = nil,
+  scale = nil,
   shift = false,
-  track = false
+  tracking = false
 }
 
 function State:new(options)
@@ -50,8 +51,9 @@ function State:advance_pointer(key)
   local reverse = self.reverse
   if self[key][1] == (reverse and 1 or CONST.COLUMNS) then
     if self[key][2] == (reverse and 1 or CONST.ROWS) then
-      if key ~= REGION and self.power == 2 and self.track then
-        self:advance_pointer(REGION)
+      if key ~= CONST.REGION and self.power == 2 and self.tracking then
+        self:advance_pointer(CONST.REGION)
+        self.selected = self.region
       end
       self[key] = reverse and {CONST.COLUMNS, CONST.ROWS} or {1, 1}
     else
@@ -68,8 +70,26 @@ function State:adjust_selection(axis, delta)
   self.selected[adjusted] = util.clamp(self.selected[adjusted] + delta, 1 , max)
 end
 
+function State:grok_current_note(artifact)
+  local tiles
+  local current = self.current
+
+  if self.power == 1 then
+    tiles = artifact:get_simplification()
+  else
+    local region = self.region
+    tiles = artifact:get_representation_at(region[1], region[2])
+  end
+
+  return self.scale[tiles[current[1]][current[2]]]
+end
+
+function State:set_scale()
+  self.scale = musicutil.generate_scale_of_length(params:get('root_note'), params:get('scale'), 16)
+end
+
 function State:traverse_menu(delta)
-  self.active_menu_item = util.clamp(self.active_menu_item + delta, 1 , 4)
+  self.active_menu_item = util.clamp(self.active_menu_item + delta, 1 , CONST.MENU_ITEM_COUNT)
 end
 
 return State

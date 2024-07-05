@@ -58,7 +58,7 @@ local function _refresh_params()
   end
 
   if state:get(CONST.DIRTY_SCALE) then
-    colorizer:set_scale()
+    state:set_scale()
     state:set(CONST.DIRTY_SCALE, false)
   end
 end
@@ -67,21 +67,22 @@ function on_step()
   _refresh_params()
 
   if state:get('playing') then
+    local note = state:grok_current_note(artifact)
     state:advance_beat()
     state:advance_pointer(CONST.CURRENT)
-    colorizer:radiate(state, artifact)
+    colorizer:radiate(note)
+    interface:set('note', note)
   end
 end
 
 function init()
-  _init_artifact()
-  _init_interface()
   _init_state()
+  _init_artifact()
+  _init_colorizer()
+  _init_interface()
   _init_mouse()
   _init_params()
-  _init_colorizer()
   _init_clocks()
-  state:set('initialized', true)
 end
 
 function redraw()
@@ -95,24 +96,18 @@ function enc(e, d)
   local shift = state:get(CONST.SHIFT)
   local position = state:get(CONST.REGION)
   local pos_x, pos_y = position[1], position[2]
-  -- There's a more sophisticated product question about this to be sorted re above/below
-  if e == 2 then
-    if menu then
-      state:traverse_menu(d)
-    else
-      if state:get(CONST.POWER) == 1 then
-        state:adjust_selection(CONST.X, d)
-      else
-        pos_x = util.clamp(pos_x + d, 1, 8)
-      end
+
+  if menu then
+    state:traverse_menu(d)
+  elseif e == 2 then
+    state:adjust_selection(CONST.X, d)
+    if state:get(CONST.POWER) == 2 then
+      pos_x = util.clamp(pos_x + d, 1, 8)
     end
   elseif e == 3 then
-    if not menu then
-      if state:get(CONST.POWER) == 1 then
-        state:adjust_selection(CONST.Y, d)
-      else
-        pos_y = util.clamp(pos_y + d, 1, 8)
-      end
+    state:adjust_selection(CONST.Y, d)
+    if state:get(CONST.POWER) == 2 then
+      pos_y = util.clamp(pos_y + d, 1, 8)
     end
   end
   state:set(CONST.REGION, {pos_x, pos_y})

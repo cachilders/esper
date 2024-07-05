@@ -7,7 +7,7 @@
 - Each level is a sequence
   - ~~Fractal-ly related to the upper sequence~~ (nope)
   - ~~dive down~~
-  - return up
-  - track centers the note and the sequence moves
-  - move moves the sequence in an x/y
+  - ~~return up~~
+  - ~~track centers the note and the sequence moves~~
+  - ~~move moves the sequence in an x/y~~
 - Asterion Engine? + Midi

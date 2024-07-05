@@ -1,8 +1,10 @@
 local CONST = include('lib/constants')
 local GRID_EDGE, GRID_X, GRID_Y = 6, 5, 13
+local musicutil = require('musicutil')
 
 local Interface = {
-  cells_dirty = true
+  cells_dirty = true,
+  note = nil
 }
 
 function Interface._draw_grid(state)
@@ -52,7 +54,13 @@ end
 function Interface:init()
 end
 
+
+function Interface:set(k, v)
+  self[k] = v
+end
+
 function Interface:draw(artifact, state)
+  self:_draw_detail()
   self:_draw_beat(state)
   self:_draw_cells(artifact, state)
   self._draw_grid(state)
@@ -64,11 +72,17 @@ function Interface:select_menu_item(state)
     {'playing', true},
     {'playing', false},
     {'reverse', false},
-    {'reverse', true}
+    {'reverse', true},
   }
-  local action = menu_items[state:get('active_menu_item')]
+  local item = state:get('active_menu_item')
 
-  state:set(action[1], action[2])
+  if item < 5 then
+    local action = menu_items[item]
+    state:set(action[1], action[2])
+  else
+    self:toggle_tracking(state)
+  end
+
   self:toggle_menu(state)
 end
 
@@ -81,8 +95,12 @@ function Interface:toggle_depth(state)
 end
 
 function Interface:toggle_menu(state)
-  state:set('menu', not state:get(CONST.MENU))
+  state:set(CONST.MENU, not state:get(CONST.MENU))
   state:set('active_menu_item', 1)
+end
+
+function Interface:toggle_tracking(state)
+  state:set(CONST.TRACKING, not state:get(CONST.TRACKING))
 end
 
 function Interface:_draw_beat(state)
@@ -112,18 +130,29 @@ function Interface:_draw_cells(artifact, state)
   end
 end
 
+function Interface:_draw_detail()
+  if self.note then
+    screen.font_face(3)
+    screen.font_size(35)
+    screen.move(126, 35)
+    screen.text_right(musicutil.note_num_to_name(self.note, true))
+  end
+end
+
 function Interface:_draw_menu(state)
   if state:get(CONST.MENU) then
     local anchor = state:get('selected')
     local active = state:get('active_menu_item')
     local playing = state:get('playing')
     local reverse = state:get('reverse')
-    local menu_items = {'PLAY', 'STOP', 'FORWARD', 'REVERSE'}
+    local track = state:get(CONST.TRACKING)
+    local menu_items = {'PLAY', 'STOP', 'FORWARD', 'REVERSE', 'TRACK'}
     local menu_item_paths = {
       CONST[menu_items[1]]..(playing and CONST.ACTIVE or CONST.INACTIVE),
       CONST[menu_items[2]]..(playing and CONST.INACTIVE or CONST.ACTIVE),
       CONST[menu_items[3]]..(reverse and CONST.INACTIVE or CONST.ACTIVE),
-      CONST[menu_items[4]]..(reverse and CONST.ACTIVE or CONST.INACTIVE)
+      CONST[menu_items[4]]..(reverse and CONST.ACTIVE or CONST.INACTIVE),
+      CONST[menu_items[5]]..(track and CONST.ACTIVE or CONST.INACTIVE)
     }
     local x = (GRID_EDGE * (anchor[1] - 1)) + GRID_X
     local y = (GRID_EDGE * (anchor[2] - 1)) + GRID_Y
@@ -142,6 +171,8 @@ function Interface:_draw_menu(state)
 
     screen.level(14)
     screen.move(120, 5)
+    screen.font_face(1)
+    screen.font_size(8)
     screen.text_right(menu_items[active])
   end
 end
@@ -153,21 +184,9 @@ function Interface:_enhance(state)
   state:set(CONST.REGION, {selected[1], selected[2]})
 end
 
-function Interface:_go(direction)
-end
-
 function Interface:_pull_back(state)
   -- TODO transition on bar with animtion on beats prior (zoom effect)
   state:set(CONST.POWER, 1)
-end
-
-function Interface:_stop()
-end
-
-function Interface:_track(angle, direction)
-end
-
-function Interface:_wait(s)
 end
 
 return Interface
