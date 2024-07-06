@@ -1,7 +1,11 @@
 local CONST = include('lib/constants')
+local mxsynths = include('mx.synths/lib/mx.synths')
+
+engine.name="MxSynths"
 
 local Colorizer = {
-  scale = nil
+  scale = nil,
+  synths = nil
 }
 
 function Colorizer:new(options)
@@ -12,19 +16,15 @@ function Colorizer:new(options)
 end
 
 function Colorizer:init()
+  self.synths = mxsynths:new()
 end
 
 function Colorizer:radiate(note) -- TODO This whole class is WIP af to prove stuff works
   if note then
-    engine.play_note(
-      note,
-      127,
-      15 / params:get('clock_tempo') * params:get('sustain'),
-      params:get('attack'),
-      params:get('decay'),
-      1,
-      params:get('release')
-    )
+    self.synths:play({
+      note = note,
+      velocity = 100,
+    })
   end
 end
 

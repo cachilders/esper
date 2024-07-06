@@ -9,8 +9,6 @@ local State = include('lib/state')
 local artifact, beat_clock, colorizer, interface, met, mouse, parameters, state
 local util = require('util')
 
-engine.name = 'Asterion'
-
 local function _get_beat_duration()
   return (60 / params:get('clock_tempo')) / params:get('subdivisions')
 end

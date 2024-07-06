@@ -33,15 +33,20 @@ function Parameters:init(state)
 end
 
 function Parameters:_init_adsr()
-  params:add_group('envelope', 'ESPER Envelope', 4)
-  params:add_control('attack', 'Attack', ControlSpec.new(0.01, 1, 'lin', 0, 0.05),
-    function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
-  params:add_control('decay', 'Decay', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
-    function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
-  params:add_control('sustain', 'Sustain', ControlSpec.new(0.01, 1, 'lin', 0, 0.5),
-    function(param) return self._quantize_and_format(param:get()*100, 0.1, '%') end)
-  params:add_control('release', 'Release', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
-    function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
+  -- params:add_group('envelope', 'ESPER Envelope', 4)
+  -- params:add_control('attack', 'Attack', ControlSpec.new(0.01, 1, 'lin', 0, 0.05),
+  --   function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
+  -- params:add_control('decay', 'Decay', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
+  --   function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
+  -- params:add_control('sustain', 'Sustain', ControlSpec.new(0.01, 1, 'lin', 0, 0.5),
+  --   function(param) return self._quantize_and_format(param:get()*100, 0.1, '%') end)
+  -- params:add_control('release', 'Release', ControlSpec.new(0.01, 1, 'lin', 0, 0.01),
+  --   function(param) return self._quantize_and_format(param:get(), 0.01, ' s') end)
+  params:set('mxsynths_synth', 6)
+  params:set('mxsynths_attack', 0.1)
+  params:set('mxsynths_decay', 0.3)
+  params:set('mxsynths_sustain', 0.5)
+  params:set('mxsynths_release', 0.75)
 end
 
 function Parameters:_init_character(state)
