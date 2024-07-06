@@ -9,15 +9,13 @@ local State = include('lib/state')
 local artifact, beat_clock, colorizer, interface, met, mouse, parameters, state
 local util = require('util')
 
-engine.name = 'Asterion'
-
 local function _get_beat_duration()
   return (60 / params:get('clock_tempo')) / params:get('subdivisions')
 end
 
 local function _init_artifact()
   artifact = Artifact:new()
-  artifact:init('test.png')
+  artifact:init('wildcat.png')
 end
 
 local function _init_clocks()
@@ -67,9 +65,11 @@ function on_step()
   _refresh_params()
 
   if state:get('playing') then
-    local note = state:grok_current_note(artifact)
     state:advance_beat()
     state:advance_pointer(CONST.CURRENT)
+
+    local note = state:grok_current_note(artifact)
+    
     colorizer:radiate(note)
     interface:set('note', note)
   end
