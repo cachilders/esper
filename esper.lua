@@ -67,9 +67,11 @@ function on_step()
   _refresh_params()
 
   if state:get('playing') then
-    local note = state:grok_current_note(artifact)
     state:advance_beat()
     state:advance_pointer(CONST.CURRENT)
+
+    local note = state:grok_current_note(artifact)
+    
     colorizer:radiate(note)
     interface:set('note', note)
   end
