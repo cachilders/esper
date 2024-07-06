@@ -17,7 +17,7 @@ end
 
 local function _init_artifact()
   artifact = Artifact:new()
-  artifact:init('test.png')
+  artifact:init('wildcat.png')
 end
 
 local function _init_clocks()

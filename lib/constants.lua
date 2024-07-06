@@ -1,6 +1,6 @@
 return {
   ACTIVE = 'active',
-  ASSET_PATH_ARTIFACT_DEFAULT = '/home/we/dust/code/esper/assets/test/',
+  ASSET_PATH_ARTIFACT_DEFAULT = '/home/we/dust/code/esper/assets/stock/',
   ASSET_PATH_ARTIFACT_USER = '/home/we/dust/data/esper/assets/',
   ASSET_PATH_UI = '/home/we/dust/code/esper/assets/ui/',
   BEAT = 'beat_',
