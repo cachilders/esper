@@ -15,7 +15,7 @@ end
 
 local function _init_artifact()
   artifact = Artifact:new()
-  artifact:init('wildcat.png')
+  artifact:init()
 end
 
 local function _init_clocks()
@@ -41,7 +41,7 @@ end
 
 local function _init_params()
   parameters = Parameters:new()
-  parameters:init(state, artifact, colorizer)
+  parameters:init(state)
 end
 
 local function _init_state()
@@ -50,6 +50,11 @@ local function _init_state()
 end
 
 local function _refresh_params()
+  if state:get(CONST.DIRTY_ARTIFACT) then
+    artifact:project(parameters)
+    state:set(CONST.DIRTY_ARTIFACT, false)
+  end
+
   if state:get(CONST.DIRTY_CLOCK) then
     beat_clock.time = _get_beat_duration()
     state:set(CONST.DIRTY_CLOCK, false)
@@ -118,13 +123,13 @@ function key(k, z)
   local menu = state:get(CONST.MENU)
   if z == 0 then
     if k == 2 then
+      interface:toggle_menu(state)
+    elseif k == 3 then
       if menu then
         interface:select_menu_item(state)
       else
         interface:toggle_depth(state)
       end
-    elseif k == 3 then
-      interface:toggle_menu(state)
     end
   end
 end
