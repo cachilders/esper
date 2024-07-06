@@ -9,7 +9,7 @@ local Interface = {
 
 function Interface._draw_grid(state)
   if not state:get(CONST.MENU) then
-    screen.display_png(CONST.ASSET_PATH_UI..'screen_bg.png', 0, 0)
+    screen.display_png(CONST.ASSET_PATH_UI..CONST.BG..CONST.EXT, 0, 0)
   end
 
   screen.level(state:get('pulse') and 5 or 1)
@@ -60,11 +60,13 @@ function Interface:set(k, v)
 end
 
 function Interface:draw(artifact, state)
-  self:_draw_detail()
-  self:_draw_beat(state)
-  self:_draw_cells(artifact, state)
-  self._draw_grid(state)
-  self:_draw_menu(state)
+  if artifact.simplification then
+    self:_draw_detail()
+    self:_draw_beat(state)
+    self:_draw_cells(artifact, state)
+    self._draw_grid(state)
+    self:_draw_menu(state)
+  end
 end
 
 function Interface:select_menu_item(state)
@@ -104,7 +106,7 @@ function Interface:toggle_tracking(state)
 end
 
 function Interface:_draw_beat(state)
-  screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..CONST.BEAT..state:get('beat')..'.png', 123, 0)
+  screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..CONST.BEAT..state:get('beat')..CONST.EXT, 123, 0)
 end
 
 function Interface:_draw_cells(artifact, state)
@@ -162,7 +164,7 @@ function Interface:_draw_menu(state)
       screen.level(7)
       screen.rect(ix + i - 1, y - 1, 7, 7)
       screen.fill()
-      screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..menu_item_paths[i]..'.png', ix + i, y)
+      screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..menu_item_paths[i]..CONST.EXT, ix + i, y)
     end
 
     screen.level(14)
