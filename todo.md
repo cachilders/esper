@@ -1,13 +1,14 @@
 - Display
   - ~~Graph (60/80?)~~
-  - Navigate graph with mouse
+  - ~~Navigate graph with mouse~~
   - ~~Thinking it might be fractal zooming~~ (nope)
 - Click to enhance (zoom/resolve)
   - 4 beats to transition
-- Each level is a sequence
+- ~~Each level is a sequence~~
   - ~~Fractal-ly related to the upper sequence~~ (nope)
   - ~~dive down~~
   - ~~return up~~
   - ~~track centers the note and the sequence moves~~
   - ~~move moves the sequence in an x/y~~
-- Asterion Engine? + Midi
+- ~~Asterion Engine? + Midi~~ (mx.synths)
+- Add midi

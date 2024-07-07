@@ -2,6 +2,7 @@ local CONST = include('lib/constants')
 
 local Mouse = {
   connection = nil,
+  throttle = false
 }
 
 function Mouse.on_event(interface, state, type, code, value)
@@ -54,7 +55,21 @@ end
 
 function Mouse:init(interface, state, dev)
   self.connection = hid.connect(dev or 1)
-  self.connection.event = function(t, c, v) self.on_event(interface, state, t, c, v) end
+  self.connection.event = function(t, c, v)
+    if self.throttle == false then
+      self.on_event(interface, state, t, c, v)
+    end
+    self:_throttle()
+  end
+end
+
+function Mouse:_throttle()
+  self.throttle = true
+
+  clock.run(function()
+    clock.sleep(0.1)
+    self.throttle = false
+  end)
 end
 
 return Mouse

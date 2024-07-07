@@ -32,10 +32,12 @@ function Interface._draw_grid(state)
   end
 
   local current = state:get(CONST.CURRENT)
-  x, y = ((current[1] - 1) * GRID_EDGE) + GRID_X, ((current[2] - 1) * GRID_EDGE) + GRID_Y
-  screen.level(7)
-  screen.rect(x, y, GRID_EDGE, GRID_EDGE)
-  screen.stroke()
+  if current[1] > 0 then
+    x, y = ((current[1] - 1) * GRID_EDGE) + GRID_X, ((current[2] - 1) * GRID_EDGE) + GRID_Y
+    screen.level(7)
+    screen.rect(x, y, GRID_EDGE, GRID_EDGE)
+    screen.stroke()
+  end
 
   local selected = state:get(CONST.SELECTED)
   x, y = ((selected[1] - 1) * GRID_EDGE) + GRID_X, ((selected[2] - 1) * GRID_EDGE) + GRID_Y
@@ -66,6 +68,7 @@ function Interface:draw(artifact, state)
     self:_draw_cells(artifact, state)
     self._draw_grid(state)
     self:_draw_menu(state)
+    self:_draw_power(state)
   end
 end
 
@@ -80,6 +83,10 @@ function Interface:select_menu_item(state)
 
   if item < 5 then
     local action = menu_items[item]
+    if state:get('playing') == false and item == 2 then
+      state:reset_step()
+    end
+    
     state:set(action[1], action[2])
   else
     self:toggle_tracking(state)
@@ -176,6 +183,13 @@ function Interface:_draw_menu(state)
     screen.font_face(1)
     screen.font_size(8)
     screen.text_right(menu_items[active])
+  end
+end
+
+function Interface:_draw_power(state)
+  if not state:get(CONST.MENU) then
+    local power = state:get(CONST.POWER) == 1 and CONST.MINUS or CONST.PLUS
+    screen.display_png(CONST.ASSET_PATH_UI..CONST.GLYPH_PATH..power..CONST.EXT, 57, 53)
   end
 end
 

@@ -1,3 +1,17 @@
+-- Esper
+-- Image Sonifier
+-- Add 64x64 images to
+-- dust/data/esper/
+--
+-- Load image from
+-- Esper params
+--
+-- K1 Action:
+--  Zoom in/out. Menu select
+-- K2 Toggle Context Menu
+-- Enc2 Navigate X or Menu
+-- Enc3 Navigate Y or Menu
+
 local Artifact = include('lib/artifact')
 local Colorizer = include('lib/colorizer')
 local CONST = include('lib/constants')
