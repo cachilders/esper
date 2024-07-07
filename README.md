@@ -6,11 +6,7 @@ Take an image, ideally something 64x64 pixels, and upload it to the esper data d
 
 `scp we@norns.local/dust/data/esper/[YOUR-IMAGE].png [PATH/TO/YOUR-IMAGE].png`
 
-Now load the image from the PARAMS > ESPER menu.
-
-Ok. That's nuts and bolts, and it tells you there's params.
-
-The meat and potatoes is you take a pic like this (it's loaded by default):
+Now load the image from the PARAMS > ESPER menu. Ok. That's nuts and bolts, and it tells you there's params. The meat and potatoes is you take a pic like this (it's loaded by default):
 
 ![image of a wildcat](/assets/stock/wildcat.png)
 
