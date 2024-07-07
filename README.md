@@ -42,7 +42,7 @@ Taken as a whole I think that's like 4,096 steps. Hot crackers!
 
 By default the player will loop over the sequence into which you have zoomed, however, you can choose to `TRACK` in the sequence direction from the context menu.
 
-You can also choose to `REVERSE` the sequence direction from that menu, not to mention `PLAY` and `STOP`.
+You can also choose to `REVERSE` the sequence direction from that menu, not to mention `PLAY` and `STOP`. Hint: push `STOP` twice to reset the playhead.
 
 Click `STOP` twice to reset the play head.
 

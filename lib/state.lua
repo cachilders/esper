@@ -31,9 +31,9 @@ function State:new(options)
 end
 
 function State:init()
-  self.current = {1, 1}
   self.region = {1, 1}
   self.selected = {1, 1}
+  self:reset_step()
 end
 
 function State:get(k)
@@ -83,6 +83,11 @@ function State:grok_current_note(artifact)
   end
 
   return self.scale[tiles[current[1]][current[2]]]
+end
+
+function State:reset_step()
+  self.current = {0, 1}
+  self.beat = 1
 end
 
 function State:set_scale()
