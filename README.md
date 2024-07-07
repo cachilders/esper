@@ -4,7 +4,7 @@ Esper is a lofi interpretation of the Esper machine from [Blade Runner](https://
 
 Take an image, ideally something 64x64 pixels, and upload it to the esper data directory (`dust/data/esper/`). I like scp, personally, but do you.
 
-`scp we@norns.local/dust/data/esper/[YOUR-IMAGE].png [PATH/TO/YOUR-IMAGE].png`
+```scp [PATH/TO/YOUR-IMAGE].png we@norns.local:dust/data/esper/[YOUR-IMAGE].png```
 
 Now load the image from the PARAMS > ESPER menu. Ok. That's nuts and bolts, and it tells you there's params. The meat and potatoes is you take a pic like this (it's loaded by default):
 
