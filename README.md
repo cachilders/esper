@@ -24,7 +24,7 @@ Toggle the menu with either `K2` or a `right click` on the mouse.
 
 ![image of sequencer with context menu opened](/assets/docs/menu.png)
 
-You can scroll this menu with any `ENC` or the mouse. `K3` and `left click` on the mouse are the `ACTION` buttons. Use the `ACTION` button to invoke a menu item. Those icons are really small, so there is some hint text next to the `BEAT INDICATOR` to let you know what you're toggling.
+You can scroll this menu with any `ENC` or the mouse. `K3` and `left click` on the mouse are the `ACTION` buttons. Use an `ACTION` button to invoke a menu item. Those icons are really small, so there is some hint text next to the `BEAT INDICATOR` to let you know what you're toggling.
 
 If the context menu is not invoked, the `ACTION` button will toggle your zoom depth. Whichever block is selected with be zoomed into and enhanced. That's where things get more interesting.
 
@@ -39,7 +39,5 @@ Taken as a whole I think that's like 4,096 steps. Hot crackers!
 By default the player will loop over the sequence into which you have zoomed, however, you can choose to `TRACK` in the sequence direction from the context menu.
 
 You can also choose to `REVERSE` the sequence direction from that menu, not to mention `PLAY` and `STOP`. Hint: push `STOP` twice to reset the playhead.
-
-Click `STOP` twice to reset the play head.
 
 That's it. The voice is provided by Zack Schollz's [mx.synths](https://github.com/schollz/mx.synths/tree/main). You can tune it from PARAMS > mx.synths. If you don't have it installed this script will not function.
