@@ -42,4 +42,4 @@ You can also choose to `REVERSE` the sequence direction from that menu, not to m
 
 Click `STOP` twice to reset the play head.
 
-That's it. The voice is provided by Zack Schollz's [mx.synths](https://github.com/schollz/mx.synths/tree/main). You can tune it from PARAMS > mx.synths. 
+That's it. The voice is provided by Zack Schollz's [mx.synths](https://github.com/schollz/mx.synths/tree/main). You can tune it from PARAMS > mx.synths. If you don't have it installed this script will not function.
